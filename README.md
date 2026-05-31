@@ -16,12 +16,6 @@ Each patch can be enabled or disabled in the configuration file.
 
 Torpor Mode Unlock and Force Achievements are disabled by default because they are cheats that can alter your user profile or save files.
 
-### Compatibility
-
-Latest release of Suzerain Unbound: v1.0.0
-
-Tested with Suzerain version 3.1.0 (Windows) Build: 153, but should continue to work barring major updates. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if it breaks.
-
 ## Installation
 
 Begin with a vanilla installation of Suzerain. (This patch is NOT compatible with mods that use MelonLoader, such as "Suzerain Modding Kit".)
@@ -30,7 +24,7 @@ Go to the [Releases page](https://github.com/KawaiiFiveO/SuzerainUnbound/release
 
 Extract the contents of this zip file directly into your main Suzerain directory (where `Suzerain.exe` is located).
 
-To enable or disable specific patches, go into the `Suzerain/BepInEx/config` folder and open `com.onehalf.suzerainunbound.cfg` in a text editor such as Notepad. Edit the settings that you want, then save the file.
+(Optional) To enable or disable specific patches, go into the `Suzerain/BepInEx/config` folder and open `com.onehalf.suzerainunbound.cfg` in a text editor (such as Notepad). Edit the settings that you want, then save the file.
 
 Launch the game and wait 1-2 minutes on the first boot for BepInEx to initialize. If you did it correctly, a second window will appear outside of the game that looks like this:
 
@@ -79,6 +73,14 @@ If you want to contribute to Suzerain Unbound or build it from source, you will 
 3. Copy this file and rename the copy to `Directory.Build.props`.
 4. Open `Directory.Build.props` in a text editor and change `PATH_TO_YOUR_SUZERAIN_GAME_FOLDER` to your actual Suzerain installation directory (e.g., `C:\Program Files (x86)\Steam\steamapps\common\Suzerain`).
 5. Open the solution in Visual Studio 2022 and compile! The compiler will now automatically find your local game assemblies.
+
+## Other Stuff
+
+### Compatibility
+
+Latest release of Suzerain Unbound: v1.0.0
+
+Tested with Suzerain version 3.1.0 (Windows) Build: 153, but should continue to work barring major updates. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if it breaks.
 
 ### Disclaimer
 
