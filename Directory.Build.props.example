@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Rename this file to "Directory.Build.props" and put your local Suzerain path here -->
+    <GameDir>PATH_TO_YOUR_SUZERAIN_GAME_FOLDER</GameDir>
+  </PropertyGroup>
+</Project>

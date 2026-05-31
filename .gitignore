@@ -1,0 +1,11 @@
+# Ignore Visual Studio temporary files
+.vs/
+obj/
+bin/
+
+# Ignore BepInEx and Game DLLs
+*.dll
+
+# Ignore local developer paths
+Directory.Build.props
+*.user
