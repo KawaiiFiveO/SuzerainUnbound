@@ -332,6 +332,42 @@
     .callout.warn .callout-label { color: var(--red-seal); }
     .callout.note .callout-label { color: var(--green-seal); }
 
+    /* ── LICENSE TOGGLE ──────────────────────────────────────────── */
+    .license-toggle {
+      background: none;
+      border: none;
+      font-family: 'Libre Baskerville', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--walnut);
+      text-underline-offset: 3px;
+      cursor: pointer;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .license-toggle:hover { color: var(--leather); }
+    .license-toggle-icon {
+      font-size: 11px;
+      display: inline-block;
+      transition: transform 0.25s ease;
+      color: var(--brass);
+    }
+    .license-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .license-body.open { max-height: 1200px; }
+    .license-body pre.code-block {
+      margin: 0;
+      border-left: none;
+      border-top: 1px solid rgba(156,120,64,0.3);
+      font-size: 12px;
+      line-height: 1.75;
+    }
+
     /* ── RESTRICTED / DOSSIER SECTIONS ───────────────────────────── */
     .dossier {
       border: 1px solid var(--parchment-deep);
@@ -420,7 +456,7 @@
     .dossier-body {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.48s ease;
+      transition: max-height 0.3s ease;
     }
     .dossier.open .dossier-body { max-height: 4000px; }
     .dossier-body-inner { padding: 28px 28px 32px; }
@@ -794,11 +830,38 @@ winhttp.dll</pre>
     <div class="compat-block" style="margin-top: 18px;">
       <div class="compat-row">
         <span class="compat-key">Suzerain Unbound</span>
-        <span class="compat-val">MIT License</span>
+        <span class="compat-val">
+          <button class="license-toggle" onclick="toggleLicense()" aria-expanded="false" aria-controls="mit-license-body">
+            <u>MIT License</u> <span class="license-toggle-icon">▾</span>
+          </button>
+        </span>
+      </div>
+      <div class="license-body" id="mit-license-body" aria-hidden="true">
+        <pre class="code-block">MIT License
+
+Copyright (c) 2026 OneHalf
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</pre>
       </div>
       <div class="compat-row">
         <span class="compat-key">BepInEx (included in Modloader bundle)</span>
-        <span class="compat-val">LGPL-2.1 License</span>
+        <span class="compat-val"><a class="license-toggle" href="https://github.com/BepInEx/BepInEx/blob/master/LICENSE" target="_blank">LGPL-2.1 License</a></span>
       </div>
     </div>
   </section>
@@ -812,6 +875,17 @@ winhttp.dll</pre>
 </footer>
 
 <script>
+  function toggleLicense() {
+    const body = document.getElementById('mit-license-body');
+    const btn  = document.querySelector('.license-toggle');
+    const icon = btn.querySelector('.license-toggle-icon');
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    body.setAttribute('aria-hidden', String(isOpen));
+    btn.setAttribute('aria-expanded', String(!isOpen));
+    icon.style.transform = isOpen ? '' : 'rotate(180deg)';
+  }
+
   function toggleDossier(header) {
     const dossier = header.closest('.dossier');
     const isOpen  = dossier.classList.contains('open');
