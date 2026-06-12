@@ -9,3 +9,12 @@ bin/
 # Ignore local developer paths
 Directory.Build.props
 *.user
+
+# Ignore the automated release outputs
+Releases/
+
+# Ignore the downloaded BepInEx zip files
+ReleaseAssets/BepInEx*.zip
+
+# Ignore the local config file
+ReleaseAssets/*.cfg
