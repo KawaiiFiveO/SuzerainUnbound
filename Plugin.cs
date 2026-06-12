@@ -57,46 +57,81 @@ public class Plugin : BasePlugin
         // 4. Conditionally apply the patches based on the user's config file
         if (SkipSplashScreen.Value)
         {
-            harmony.PatchAll(typeof(SkipSplashPatch));
-            Log.LogInfo("[CONFIG] Skip Splash patch applied.");
+            try
+            {
+                harmony.PatchAll(typeof(SkipSplashPatch));
+                Log.LogInfo("[CONFIG] Skip Splash patch applied.");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Skip Splash patch failed to apply.");
+            }
         }
 
         if (EnableInstantText.Value)
         {
-            harmony.PatchAll(typeof(InstantTextPatch));
-            Log.LogInfo("[CONFIG] Fast Dialogue patch applied.");
+            try
+            {
+                harmony.PatchAll(typeof(InstantTextPatch));
+                Log.LogInfo("[CONFIG] Fast Dialogue patch applied.");
 
-            ClassInjector.RegisterTypeInIl2Cpp<DialogueSkipper>();
-            var skipperObject = new GameObject("SuzerainDialogueSkipper");
-            skipperObject.AddComponent<DialogueSkipper>();
-            GameObject.DontDestroyOnLoad(skipperObject);
-            Log.LogInfo($"[CONFIG] Dialogue Skipper injected! Hold '{SkipKey.Value}' in-game to fast-forward.");
+                ClassInjector.RegisterTypeInIl2Cpp<DialogueSkipper>();
+                var skipperObject = new GameObject("SuzerainDialogueSkipper");
+                skipperObject.AddComponent<DialogueSkipper>();
+                GameObject.DontDestroyOnLoad(skipperObject);
+                Log.LogInfo($"[CONFIG] Dialogue Skipper injected! Hold '{SkipKey.Value}' in-game to fast-forward.");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Fast Dialogue patch failed to apply.");
+            }
         }
 
         if (EnableBackgroundRun.Value)
         {
-            harmony.PatchAll(typeof(BackgroundExecutionPatch));
-            harmony.PatchAll(typeof(AlwaysFocusedPatch));
-            Log.LogInfo("[CONFIG] Run In Background patches applied.");
+            try
+            {
+                harmony.PatchAll(typeof(BackgroundExecutionPatch));
+                harmony.PatchAll(typeof(AlwaysFocusedPatch));
+                Log.LogInfo("[CONFIG] Run In Background patches applied.");
 
-            Il2CppInterop.Runtime.Injection.ClassInjector.RegisterTypeInIl2Cpp<BackgroundMuteController>();
-            var muteObject = new GameObject("SuzerainBackgroundMuteController");
-            muteObject.AddComponent<BackgroundMuteController>();
-            GameObject.DontDestroyOnLoad(muteObject);
-            Log.LogInfo($"[CONFIG] Background Mute Controller injected. MuteInBackground: {MuteInBackground.Value}");
+                Il2CppInterop.Runtime.Injection.ClassInjector.RegisterTypeInIl2Cpp<BackgroundMuteController>();
+                var muteObject = new GameObject("SuzerainBackgroundMuteController");
+                muteObject.AddComponent<BackgroundMuteController>();
+                GameObject.DontDestroyOnLoad(muteObject);
+                Log.LogInfo($"[CONFIG] Background Mute Controller injected. MuteInBackground: {MuteInBackground.Value}");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Run In Background patches failed to apply.");
+            }
         }
 
         if (EnableTorporUnlock.Value)
         {
-            harmony.PatchAll(typeof(FakeCampaignCompletionPatch));
-            //harmony.PatchAll(typeof(ForceTorporToggleInteractablePatch)); // this patch is likely redundant
-            Log.LogInfo("[CONFIG] Torpor Mode Unlock patches applied.");
+            try
+            {
+                harmony.PatchAll(typeof(FakeCampaignCompletionPatch));
+                //harmony.PatchAll(typeof(ForceTorporToggleInteractablePatch)); // this patch is likely redundant
+                Log.LogInfo("[CONFIG] Torpor Mode Unlock patches applied.");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Torpor Mode Unlock patches failed to apply.");
+            }
         }
 
         if (EnableAchievements.Value)
         {
-            harmony.PatchAll(typeof(ForceDialogueAchievementPatch));
-            Log.LogInfo("[CONFIG] Force Achievements patch applied.");
+            try
+            {
+                harmony.PatchAll(typeof(ForceDialogueAchievementPatch));
+                Log.LogInfo("[CONFIG] Force Achievements patch applied.");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Force Achievements patch failed to apply.");
+            }
         }
 
         Log.LogInfo("All selected patches applied!");

@@ -11,6 +11,7 @@ public class DialogueSkipper : MonoBehaviour
     public DialogueSkipper(IntPtr ptr) : base(ptr) { }
 
     private float _nextAdvanceTime = 0f;
+    private static bool _hasLogged = false;
 
     private readonly Key[] _blacklistedKeys = new Key[]
 {
@@ -29,13 +30,17 @@ public class DialogueSkipper : MonoBehaviour
             // If the user chose a banned key, forcefully revert to LeftCtrl
             if (_blacklistedKeys.Contains(configuredKey))
             {
+                if (!_hasLogged)
+                {
+                    Plugin.Log.LogWarning($"[DialogueSkipper] Configured key {configuredKey} conflicts with default key bindings! Defaulting to LeftCtrl.");
+                    _hasLogged = true;
+                }
                 configuredKey = Key.LeftCtrl;
-                Plugin.Log.LogWarning($"[DialogueSkipper] Configured key {configuredKey} conflicts with default key bindings! Defaulting to LeftCtrl.");
             }
 
 
             // Use the indexer to read the live physical state of the configured key
-            if (Keyboard.current != null && Keyboard.current[configuredKey].isPressed)
+            if (Keyboard.current != null && Keyboard.current[configuredKey].isPressed && DialogueManager.standardDialogueUI != null && DialogueManager.isConversationActive)
             {
                 if (Time.time >= _nextAdvanceTime)
                 {

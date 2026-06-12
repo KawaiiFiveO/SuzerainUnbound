@@ -22,16 +22,12 @@ public class BackgroundExecutionPatch
 [HarmonyPatch(typeof(Application), nameof(Application.isFocused), MethodType.Getter)]
 public class AlwaysFocusedPatch
 {
-    static bool Prefix(ref bool __result)
+    static void Postfix(ref bool __result)
     {
+        // If our setting is enabled, overwrite whatever Unity returned with 'true'
         if (Plugin.EnableBackgroundRun.Value)
         {
-            // Force the answer to always be TRUE
             __result = true;
-
-            // Skip the real Unity check
-            return false;
         }
-        return true;
     }
 }

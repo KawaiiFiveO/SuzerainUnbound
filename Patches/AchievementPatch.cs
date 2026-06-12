@@ -12,15 +12,30 @@ public class ForceDialogueAchievementPatch
     {
         // Traverse looks inside the object, ignores 'protected' limits, climbs up to the base class, 
         // finds the GetParameter method, passes 0 and an empty string, and gives us the result!
-        string achievementID = Traverse.Create(__instance)
+        string achievementID = string.Empty;
+        try
+        {
+            achievementID = Traverse.Create(__instance)
             .Method("GetParameter", new object[] { 0, string.Empty })
             .GetValue<string>();
+        }
+        catch
+        {
+            Plugin.Log.LogWarning("[ForceAchievements] Failed to get achievement ID!");
+        }
 
         if (!string.IsNullOrEmpty(achievementID))
         {
             Plugin.Log.LogInfo($"[ForceAchievements] Bypassing Torpor Mode! Unlocking achievement: {achievementID}");
 
-            new Achievement(achievementID).Trigger();
+            try
+            {
+                new Achievement(achievementID).Trigger();
+            }
+            catch
+            {
+                Plugin.Log.LogWarning($"[ForceAchievements] Failed to unlock achievement: {achievementID}");
+            }
         }
         else
         {
