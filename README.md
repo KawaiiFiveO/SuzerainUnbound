@@ -8,7 +8,9 @@ Each patch can be enabled or disabled in the configuration file.
 
 **Skip Splash**: Skips the Torpor Games intro logos. Enabled by default.
 
-**Instant Text**: Instantly shows text on screen and enables Dialogue Skip, which allows you to hold a key down (default: `LeftCtrl`) to rapidly advance the dialogue. Enabled by default.
+**Fast Dialogue**: Instantly shows text on screen (similar to `Typewriter` OFF) and enables **Dialogue Skip**, which allows you to hold a key down (default: `LeftCtrl`) to rapidly advance the dialogue. You can even skip unread text (which is not allowed by the `Skip Read Dialogue Text` menu option in vanilla). Enabled by default.
+
+**Run In Background**: Prevents the game from pausing or throttling framerate when Alt-Tabbed, which improves stability. Game audio can also be muted when tabbing out. Enabled by default.
 
 **Torpor Mode Unlock**: Suzerain forces Torpor Mode ON when playing on a fresh profile. This allows it to be set to OFF so that you can save your game.
 
@@ -20,7 +22,7 @@ Torpor Mode Unlock and Force Achievements are disabled by default because they a
 
 Begin with a vanilla installation of Suzerain. (This patch is NOT compatible with mods that use MelonLoader, such as "Suzerain Modding Kit".)
 
-Go to the [Releases page](https://github.com/KawaiiFiveO/SuzerainUnbound/releases) and download the latest "With Modloader" release. It will be named something like `SuzerainUnbound_v1.0.0_WithModloader.zip`, the version number will vary.
+Go to the [Releases page](https://github.com/KawaiiFiveO/SuzerainUnbound/releases) and download the latest "With Modloader" release. It will be named something like `SuzerainUnbound_v1.x.x_WithModloader.zip`, the version number will vary.
 
 Extract the contents of this zip file directly into your main Suzerain directory (where `Suzerain.exe` is located).
 
@@ -32,15 +34,21 @@ Launch the game and wait 1-2 minutes on the first boot for BepInEx to initialize
 
 Enjoy the improvements!
 
-### For advanced users
+### Game Updates
+
+If there is a game update, Suzerain Unbound will stop working, and the `BepInEx/interop` folder will need to be deleted to launch the game. It is recommended to uninstall BepInEx entirely by following the instructions below, then install a new "With Modloader" release (if present).
+
+### Advanced Users
 
 If you already have BepInEx 6.0 installed and want to use Suzerain Unbound alongside other mods, you can download the "Plugin Only" release and install it by dropping `SuzerainUnbound.dll` directly into your existing `Suzerain/BepInEx/plugins` folder.
 
-**NOTE**: This plugin requires **BepInEx 6.0 (IL2CPP) Bleeding Edge** (tested on build #755). It will **NOT** work on BepInEx 5.x. If you do not know what this means, please download the **"With Modloader"** bundle, which includes everything pre-configured!
+**NOTE**: This plugin requires **BepInEx 6.0 (IL2CPP) Bleeding Edge** (tested on build #764). It will **NOT** work on BepInEx 5.x. If you do not know what this means, please download the **"With Modloader"** bundle, which includes everything pre-configured!
 
 ### Uninstall
 
 If you wish to temporarily disable BepInEx, you can rename the `BepInEx` folder in the `Suzerain` directory to something else (such as `zBepinEx`) to prevent it from launching when you start the game.
+
+To disable only Suzerain Unbound specifically, remove `SuzerainUnbound.dll` from the `Suzerain/BepInEx/plugins` folder.
 
 To permanently revert your game back to vanilla, delete the following items from the `Suzerain` directory:
 
@@ -60,11 +68,12 @@ If you want to contribute to Suzerain Unbound or build it from source, you will 
 
 ### Prerequisites
 1. You must have **Suzerain** installed.
-2. You must have **BepInEx 6.0 (IL2CPP)** installed in your game directory. (tested on build #755)
+2. You must have **BepInEx 6.0 (IL2CPP)** installed in your game directory. (tested on build #764)
 3. You must have launched the game at least once with BepInEx active to generate the `BepInEx/interop` assemblies.
 
 * Note: Standard BepInEx 5.x **will not work** as it does not support IL2CPP games.
 * You can download the correct bleeding edge builds from the official BepInEx build server: [BepInEx Bleeding Edge Builds](https://builds.bepinex.dev/projects/bepinex_be) (Make sure to select the **Unity IL2CPP** build for your operating system, e.g., `BepInEx-Unity.IL2CPP-win-x64`).
+* If there is a game update, you will need to delete the `interop` folder to regenerate the assemblies, then re-link them in the project.
 
 ### Linking your Game Files
 
@@ -76,11 +85,25 @@ If you want to contribute to Suzerain Unbound or build it from source, you will 
 
 ## Other Stuff
 
+### Feature Requests
+
+You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) to suggest a specific patch, or submit a pull request if you have created a new patch or bug fix and would like it to be added. Contributions are welcome.
+
+### Known Issues
+
+**Torpor Mode Unlock**: The game might crash if you rapidly switch tabs on the New Story selection screen, so just don't go too crazy on that menu when starting a new game. Not sure yet what causes this.
+
+**General Crashes**: Vanilla Suzerain is already known to be unstable, so adding mods to it probably doesn't help.
+
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.0.0
+Latest release of Suzerain Unbound: v1.1.0
 
-Tested with Suzerain version 3.1.0 (Windows) Build: 153, but should continue to work barring major updates. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if it breaks.
+Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
+
+If the latest release is outdated, you will have to wait for Suzerain Unbound to be updated. In the meantime, you must disable or uninstall BepInEx entirely to play vanilla Suzerain.
+
+Suzerain Unbound is **NOT compatible with mods that use MelonLoader**, such as "Suzerain Modding Kit".
 
 ### Disclaimer
 

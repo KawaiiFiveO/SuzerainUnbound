@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suzerain Unbound — Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment:      #F0E6CE;
+      --parchment-mid:  #E2D4B4;
+      --parchment-deep: #D0BF99;
+      --walnut:         #2C1810;
+      --mahogany:       #501E0E;
+      --leather:        #7A4F30;
+      --brass:          #9C7840;
+      --brass-light:    #C4A060;
+      --red-seal:       #8B2424;
+      --green-seal:     #2A5C38;
+      --code-bg:        #1C0E08;
+      --code-text:      #C8A060;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Libre Baskerville', Georgia, serif;
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--walnut);
+      background-color: var(--parchment);
+    }
+
+    /* ── BANNER ─────────────────────────────────────────────────── */
+    .banner {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      background: var(--parchment-deep);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 44px;
+      overflow: hidden;
+    }
+
+    .banner-image-slot {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(44,24,16,0.05) 0%, rgba(44,24,16,0.62) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .banner-image-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .banner-image-placeholder svg { opacity: 0.18; }
+    .banner-image-placeholder span {
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--leather);
+      opacity: 0.45;
+    }
+
+    .banner-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 24px;
+    }
+    .banner-eyebrow {
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(240,230,206,0.65);
+      margin-bottom: 10px;
+    }
+    .banner-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 56px;
+      font-weight: 700;
+      color: #F5ECDA;
+      text-shadow: 0 2px 18px rgba(30,10,4,0.7), 0 0 50px rgba(30,10,4,0.4);
+      line-height: 1.05;
+      letter-spacing: 0.025em;
+    }
+    .banner-subtitle {
+      font-family: 'Libre Baskerville', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: rgba(240,230,206,0.75);
+      margin-top: 9px;
+    }
+    .banner-version {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 4px 16px;
+      border: 1px solid rgba(196,160,96,0.6);
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brass-light);
+    }
+
+    /* ── NAVIGATION ─────────────────────────────────────────────── */
+    .nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--mahogany);
+      border-bottom: 2px solid var(--brass);
+    }
+    .nav-inner {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: stretch;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-label {
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--brass);
+      padding: 13px 14px 13px 0;
+      margin-right: 2px;
+      border-right: 1px solid rgba(156,120,64,0.35);
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+    .nav-inner a {
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(240,230,206,0.62);
+      text-decoration: none;
+      padding: 13px 11px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color 0.18s;
+      display: flex;
+      align-items: center;
+    }
+    .nav-inner a:hover { color: var(--brass-light); }
+
+    /* ── PAGE WRAPPER ────────────────────────────────────────────── */
+    .page {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 56px 28px 88px;
+    }
+
+    /* ── SECTION CHROME ──────────────────────────────────────────── */
+    .doc-section { margin-bottom: 60px; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 26px;
+      padding-bottom: 11px;
+      border-bottom: 1px solid var(--brass-light);
+    }
+    .section-sigil {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--brass);
+      opacity: 0.55;
+      line-height: 1;
+    }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 27px;
+      font-weight: 700;
+      color: var(--mahogany);
+      letter-spacing: 0.01em;
+    }
+    h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--leather);
+      margin: 30px 0 11px;
+      letter-spacing: 0.01em;
+    }
+    p { margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+    a { color: var(--leather); text-underline-offset: 3px; }
+    a:hover { color: var(--mahogany); }
+
+    /* ── PATCH GRID ──────────────────────────────────────────────── */
+    .patch-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 6px;
+    }
+    @media (max-width: 580px) { .patch-grid { grid-template-columns: 1fr; } }
+
+    .patch-card {
+      background: var(--parchment-mid);
+      border: 1px solid var(--parchment-deep);
+      border-left: 3px solid var(--brass);
+      padding: 16px 18px 18px;
+    }
+    .patch-card.cheat { border-left-color: var(--red-seal); }
+    .patch-name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--mahogany);
+      margin-bottom: 6px;
+    }
+    .patch-desc {
+      font-size: 13.5px;
+      line-height: 1.65;
+      margin: 0 0 10px;
+    }
+    .patch-status {
+      display: inline-block;
+      padding: 2px 9px;
+      border: 1px solid;
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .patch-status.on  { color: var(--green-seal); border-color: var(--green-seal); }
+    .patch-status.off { color: var(--red-seal);   border-color: var(--red-seal);   }
+
+    /* ── STEPS ───────────────────────────────────────────────────── */
+    .steps { counter-reset: step; list-style: none; }
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: var(--mahogany);
+      color: var(--brass-light);
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 3px;
+    }
+    .step-num::before { content: counter(step); }
+    .step-body { flex: 1; }
+
+    /* ── CODE BLOCKS ─────────────────────────────────────────────── */
+    pre.code-block {
+      background: var(--code-bg);
+      color: var(--code-text);
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      padding: 16px 20px;
+      margin: 12px 0;
+      border-left: 3px solid var(--brass);
+      overflow-x: auto;
+      white-space: pre;
+    }
+    code {
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 13px;
+      background: var(--parchment-deep);
+      padding: 1px 5px;
+      color: var(--mahogany);
+    }
+
+    /* ── CALLOUTS ────────────────────────────────────────────────── */
+    .callout {
+      padding: 13px 18px;
+      margin: 18px 0;
+      border: 1px solid;
+      font-size: 14px;
+    }
+    .callout.warn {
+      background: rgba(139,36,36,0.055);
+      border-color: rgba(139,36,36,0.4);
+      border-left: 3px solid var(--red-seal);
+    }
+    .callout.note {
+      background: rgba(42,92,56,0.055);
+      border-color: rgba(42,92,56,0.35);
+      border-left: 3px solid var(--green-seal);
+    }
+    .callout-label {
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+    .callout.warn .callout-label { color: var(--red-seal); }
+    .callout.note .callout-label { color: var(--green-seal); }
+
+    /* ── RESTRICTED / DOSSIER SECTIONS ───────────────────────────── */
+    .dossier {
+      border: 1px solid var(--parchment-deep);
+      margin-bottom: 20px;
+      background: var(--parchment-mid);
+    }
+
+    .dossier-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      cursor: pointer;
+      user-select: none;
+      border-bottom: 1px solid transparent;
+      transition: background 0.18s, border-color 0.18s;
+      gap: 16px;
+    }
+    .dossier-header:hover { background: var(--parchment-deep); }
+    .dossier.open .dossier-header { border-bottom-color: var(--parchment-deep); }
+
+    .dossier-title-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* The signature element: red rotated stamp */
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px 10px 4px;
+      border: 2px solid var(--red-seal);
+      font-family: 'Courier Prime', monospace;
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--red-seal);
+      font-weight: 700;
+      transform: rotate(-2.5deg);
+      opacity: 0.8;
+      flex-shrink: 0;
+      transition: opacity 0.3s, text-decoration 0.1s;
+      white-space: nowrap;
+    }
+    .dossier.open .stamp {
+      text-decoration: line-through;
+      opacity: 0.32;
+    }
+
+    .dossier-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--mahogany);
+    }
+
+    .dossier-toggle {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--leather);
+    }
+    .toggle-box {
+      width: 22px;
+      height: 22px;
+      border: 1px solid var(--brass);
+      color: var(--brass);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      line-height: 1;
+      transition: transform 0.3s ease;
+    }
+    .dossier.open .toggle-box { transform: rotate(45deg); }
+
+    .dossier-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.48s ease;
+    }
+    .dossier.open .dossier-body { max-height: 4000px; }
+    .dossier-body-inner { padding: 28px 28px 32px; }
+
+    /* ── ISSUES LIST ─────────────────────────────────────────────── */
+    .issues-list { list-style: none; }
+    .issues-list li {
+      background: var(--parchment-mid);
+      border-left: 3px solid var(--brass);
+      padding: 13px 16px;
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+    .issues-list li strong {
+      font-family: 'Playfair Display', serif;
+      display: block;
+      margin-bottom: 4px;
+      color: var(--mahogany);
+      font-size: 15px;
+    }
+
+    /* ── COMPAT TABLE ─────────────────────────────────────────────── */
+    .compat-block {
+      background: var(--parchment-mid);
+      border: 1px solid var(--parchment-deep);
+    }
+    .compat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--parchment-deep);
+      font-size: 14px;
+    }
+    .compat-row:last-child { border-bottom: none; }
+    .compat-key {
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 12px;
+      color: var(--leather);
+    }
+    .compat-val { font-weight: 700; }
+    .compat-val.bad { color: var(--red-seal); }
+
+    /* ── BUTTON LINK ─────────────────────────────────────────────── */
+    .btn-link {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 22px;
+      background: var(--mahogany);
+      color: var(--brass-light) !important;
+      text-decoration: none !important;
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: background 0.18s;
+    }
+    .btn-link:hover { background: var(--leather); }
+
+    /* ── ORNAMENT ─────────────────────────────────────────────────── */
+    .ornament {
+      text-align: center;
+      color: var(--brass);
+      font-size: 15px;
+      letter-spacing: 0.7em;
+      margin: 44px 0;
+      opacity: 0.45;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────────────── */
+    footer {
+      background: var(--mahogany);
+      border-top: 2px solid var(--brass);
+      color: rgba(240,230,206,0.5);
+      text-align: center;
+      padding: 22px 24px;
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+    }
+    footer a { color: var(--brass-light); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .banner-title { font-size: 38px; }
+      .banner { height: 320px; }
+      .page { padding: 36px 18px 60px; }
+      .dossier-header { padding: 16px 18px; }
+      .dossier-body-inner { padding: 22px 18px 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ BANNER ══════════════════════════════════════════════════════ -->
+<header class="banner">
+  <div class="banner-image-slot">
+    <img src="banner.jpg"> 
+  </div>
+  <div class="banner-content">
+    <div class="banner-eyebrow">Quality-of-Life Mod for Suzerain</div>
+    <h1 class="banner-title">Suzerain Unbound</h1>
+    <div class="banner-subtitle">Remove limitations. Restore control. Play your way.</div>
+    <div class="banner-version">Release v1.1.0</div>
+  </div>
+</header>
+
+<!-- ═══ NAVIGATION ══════════════════════════════════════════════════ -->
+<nav class="nav-bar" aria-label="Page sections">
+  <div class="nav-inner">
+    <span class="nav-label">Jump to</span>
+    <a href="#patches">Patches</a>
+    <a href="#installation">Installation</a>
+    <a href="#uninstall">Uninstalling</a>
+    <a href="#advanced">Advanced</a>
+    <a href="#development">Development</a>
+    <a href="#issues">Known Issues</a>
+    <a href="#compatibility">Compatibility</a>
+    <a href="#disclaimer">Disclaimer</a>
+  </div>
+</nav>
+
+<!-- ═══ MAIN ════════════════════════════════════════════════════════ -->
+<main class="page">
+
+  <!-- PATCHES ─────────────────────────────────────────────────────── -->
+  <section class="doc-section" id="patches">
+    <div class="section-header">
+      <span class="section-sigil">§</span>
+      <h2>Included Patches</h2>
+    </div>
+    <p>Each patch can be individually enabled or disabled in the configuration file. Cheat patches are disabled by default.</p>
+    <div class="patch-grid">
+
+      <div class="patch-card">
+        <div class="patch-name">Skip Splash</div>
+        <p class="patch-desc">Skips the Torpor Games intro logos on every launch.</p>
+        <span class="patch-status on">Enabled by default</span>
+      </div>
+
+      <div class="patch-card">
+        <div class="patch-name">Fast Dialogue</div>
+        <p class="patch-desc">Instantly displays all text and enables Dialogue Skip — hold a key (default: <code>LeftCtrl</code>) to rapidly advance dialogue, including unread lines that vanilla does not allow skipping.</p>
+        <span class="patch-status on">Enabled by default</span>
+      </div>
+
+      <div class="patch-card">
+        <div class="patch-name">Run In Background</div>
+        <p class="patch-desc">Prevents the game from pausing or throttling its framerate when Alt-Tabbed, improving stability. Audio can also be muted automatically on tab-out.</p>
+        <span class="patch-status on">Enabled by default</span>
+      </div>
+
+      <div class="patch-card">
+        <div class="patch-name">Torpor Mode Unlock</div>
+        <p class="patch-desc">Suzerain forces Torpor Mode ON for new profiles, blocking manual saves. This patch allows it to be turned OFF so you can save your game normally.</p>
+        <span class="patch-status off">Disabled by default</span>
+      </div>
+
+      <div class="patch-card cheat">
+        <div class="patch-name">Force Achievements</div>
+        <p class="patch-desc">Forces Steam achievements to unlock regardless of whether Torpor Mode is active.</p>
+        <span class="patch-status off">Disabled by default</span>
+      </div>
+
+    </div>
+    <div class="callout warn" style="margin-top: 20px;">
+      <div class="callout-label">⚠ Cheat Patches</div>
+      <p>Torpor Mode Unlock and Force Achievements are disabled by default. Enabling them may permanently alter your save files or Steam profile. Do not enable these unless you fully understand their effects.</p>
+    </div>
+  </section>
+
+  <!-- INSTALLATION ────────────────────────────────────────────────── -->
+  <section class="doc-section" id="installation">
+    <div class="section-header">
+      <span class="section-sigil">§</span>
+      <h2>Installation</h2>
+    </div>
+    <div class="callout note">
+      <div class="callout-label">Prerequisite</div>
+      <p>Begin with a clean, vanilla installation of Suzerain. This mod is <strong>not compatible with MelonLoader-based mods</strong> (such as "Suzerain Modding Kit").</p>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <div class="step-num"></div>
+        <div class="step-body">
+          Visit the <a href="https://github.com/KawaiiFiveO/SuzerainUnbound/releases" target="_blank">Releases page on GitHub</a> and download the latest <strong>With Modloader</strong> release. It will be named something like:
+          <pre class="code-block">SuzerainUnbound_v1.x.x_WithModloader.zip</pre>
+        </div>
+      </li>
+      <li>
+        <div class="step-num"></div>
+        <div class="step-body">
+          Extract the contents of the zip file directly into your main Suzerain directory — the folder containing <code>Suzerain.exe</code>.
+        </div>
+      </li>
+      <li>
+        <div class="step-num"></div>
+        <div class="step-body">
+          <strong>(Optional)</strong> To enable or disable specific patches, open the configuration file in a plain text editor (such as Notepad) and edit to taste:
+          <pre class="code-block">Suzerain/BepInEx/config/com.onehalf.suzerainunbound.cfg</pre>
+        </div>
+      </li>
+      <li>
+        <div class="step-num"></div>
+        <div class="step-body">
+          Launch the game. On the first boot, <strong>wait 1–2 minutes</strong> for BepInEx to initialize. If everything is installed correctly, a second console window will appear alongside the game window.
+        </div>
+      </li>
+    </ol>
+
+    <h3>After a Game Update</h3>
+    <p>If Suzerain receives an update, Suzerain Unbound will stop working. The <code>BepInEx/interop</code> folder must be deleted before the game will launch again. The safest approach is to fully uninstall BepInEx (see below), then install a new "With Modloader" release once one is available.</p>
+  </section>
+
+  <!-- UNINSTALL ───────────────────────────────────────────────────── -->
+  <section class="doc-section" id="uninstall">
+    <div class="section-header">
+      <span class="section-sigil">§</span>
+      <h2>Uninstalling</h2>
+    </div>
+    <p>To <strong>temporarily disable</strong> BepInEx without uninstalling, rename the <code>BepInEx</code> folder to something else (e.g. <code>zBepInEx</code>). The mod loader will not run until you rename it back.</p>
+    <p>To disable <strong>only Suzerain Unbound</strong>, remove <code>SuzerainUnbound.dll</code> from the plugins folder:</p>
+    <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound.dll</pre>
+    <p>To <strong>fully revert to vanilla</strong>, delete the following items from your Suzerain directory, then re-verify files on Steam if needed:</p>
+    <pre class="code-block">BepInEx/            (folder)
+dotnet/             (folder)
+.doorstop_version
+doorstop_config.ini
+winhttp.dll</pre>
+  </section>
+
+  <div class="ornament">— ✦ —</div>
+
+  <!-- ADVANCED (DOSSIER) ──────────────────────────────────────────── -->
+  <div class="dossier" id="advanced">
+    <div class="dossier-header" onclick="toggleDossier(this)" role="button" aria-expanded="false" tabindex="0">
+      <div class="dossier-title-row">
+        <div class="stamp">Restricted</div>
+        <div class="dossier-title">Advanced Users</div>
+      </div>
+      <div class="dossier-toggle">
+        <span class="toggle-label">Expand</span>
+        <div class="toggle-box">+</div>
+      </div>
+    </div>
+    <div class="dossier-body" aria-hidden="true">
+      <div class="dossier-body-inner">
+        <p>If you already have <strong>BepInEx 6.0</strong> installed and want to run Suzerain Unbound alongside other mods, or you want to install BepInEx manually, download the "Plugin Only" release instead and drop the DLL directly into your existing plugins folder:</p>
+        <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound.dll</pre>
+        <div class="callout warn">
+          <div class="callout-label">⚠ Version Requirement</div>
+          <p>This plugin requires <strong>BepInEx 6.0 (IL2CPP) Bleeding Edge</strong>, tested on build #764. It will <strong>not</strong> work on BepInEx 5.x. If you do not have existing mods and do not want to install BepInEx manually, use the "With Modloader" bundle instead — it includes everything pre-configured.</p>
+        </div>
+        <p>The correct BepInEx builds are available from the official build server. Make sure to download the <strong>Unity IL2CPP</strong> build for your operating system (e.g. <code>BepInEx-Unity.IL2CPP-win-x64</code>).</p>
+        <a class="btn-link" href="https://builds.bepinex.dev/projects/bepinex_be" target="_blank">BepInEx Bleeding Edge Builds →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEVELOPMENT (DOSSIER) ───────────────────────────────────────── -->
+  <div class="dossier" id="development" style="margin-bottom: 60px;">
+    <div class="dossier-header" onclick="toggleDossier(this)" role="button" aria-expanded="false" tabindex="0">
+      <div class="dossier-title-row">
+        <div class="stamp">Restricted</div>
+        <div class="dossier-title">Development Setup</div>
+      </div>
+      <div class="dossier-toggle">
+        <span class="toggle-label">Expand</span>
+        <div class="toggle-box">+</div>
+      </div>
+    </div>
+    <div class="dossier-body" aria-hidden="true">
+      <div class="dossier-body-inner">
+        <p>To contribute to Suzerain Unbound or build from source, you will need to link the project against your local Suzerain installation.</p>
+
+        <h3>Prerequisites</h3>
+        <ul style="padding-left: 22px; line-height: 2.1; margin-bottom: 4px;">
+          <li><strong>Suzerain</strong> must be installed.</li>
+          <li><strong>BepInEx 6.0 (IL2CPP) Bleeding Edge</strong> must be installed in the game directory (tested on build #764). Standard BepInEx 5.x will not work.</li>
+          <li>Launch the game <strong>at least once</strong> with BepInEx active to generate the <code>BepInEx/interop</code> assemblies. If a game update occurs, delete this folder to regenerate them, then re-link in the project.</li>
+        </ul>
+
+        <h3>Linking Your Game Files</h3>
+        <ol class="steps">
+          <li>
+            <div class="step-num"></div>
+            <div class="step-body">Clone the repository to your local machine.</div>
+          </li>
+          <li>
+            <div class="step-num"></div>
+            <div class="step-body">In the project root, find <code>Directory.Build.props.example</code> and make a copy renamed to <code>Directory.Build.props</code>.</div>
+          </li>
+          <li>
+            <div class="step-num"></div>
+            <div class="step-body">Open <code>Directory.Build.props</code> in a text editor and replace <code>PATH_TO_YOUR_SUZERAIN_GAME_FOLDER</code> with your actual installation path, e.g.:<pre class="code-block">C:\Program Files (x86)\Steam\steamapps\common\Suzerain</pre></div>
+          </li>
+          <li>
+            <div class="step-num"></div>
+            <div class="step-body">Open the solution in <strong>Visual Studio 2022</strong> and compile. The build system will automatically locate your local game assemblies.</div>
+          </li>
+        </ol>
+
+        <h3>Contributing</h3>
+        <p>Feature requests and pull requests are welcome. If you have created a new patch or a bug fix, open a pull request on GitHub. For suggestions, open an issue.</p>
+        <a class="btn-link" href="https://github.com/KawaiiFiveO/SuzerainUnbound/issues" target="_blank">Open a Feature Request or Issue →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- KNOWN ISSUES ────────────────────────────────────────────────── -->
+  <section class="doc-section" id="issues">
+    <div class="section-header">
+      <span class="section-sigil">§</span>
+      <h2>Known Issues</h2>
+    </div>
+    <ul class="issues-list">
+      <li>
+        <strong>Torpor Mode Unlock</strong>
+        The game may crash if you rapidly switch tabs on the New Story selection screen. Avoid clicking through that menu too quickly when starting a new game. The root cause is not yet identified.
+      </li>
+      <li>
+        <strong>General Crashes</strong>
+        Vanilla Suzerain is known to be unstable; adding mods may compound this. If you experience crashes, try disabling patches one at a time to isolate the cause.
+      </li>
+    </ul>
+  </section>
+
+  <!-- COMPATIBILITY ───────────────────────────────────────────────── -->
+  <section class="doc-section" id="compatibility">
+    <div class="section-header">
+      <span class="section-sigil">§</span>
+      <h2>Compatibility</h2>
+    </div>
+    <div class="compat-block">
+      <div class="compat-row">
+        <span class="compat-key">Suzerain Unbound version</span>
+        <span class="compat-val">v1.1.0</span>
+      </div>
+      <div class="compat-row">
+        <span class="compat-key">Tested with Suzerain</span>
+        <span class="compat-val">3.1.0 (Windows) — Build 175</span>
+      </div>
+      <div class="compat-row">
+        <span class="compat-key">BepInEx required</span>
+        <span class="compat-val">6.0 IL2CPP Bleeding Edge (build #764)</span>
+      </div>
+      <div class="compat-row">
+        <span class="compat-key">MelonLoader mods</span>
+        <span class="compat-val bad">Not compatible</span>
+      </div>
+    </div>
+    <div class="callout warn" style="margin-top: 18px;">
+      <div class="callout-label">⚠ After a Major Game Update</div>
+      <p>Suzerain Unbound will break if the game receives a major update. If the latest release is outdated, you must disable or uninstall BepInEx entirely to play vanilla Suzerain in the interim. Submit an <a href="https://github.com/KawaiiFiveO/SuzerainUnbound/issues" target="_blank">issue report</a> if a patch is broken — include log files from the <code>BepInEx/logs</code> folder in your report.</p>
+    </div>
+  </section>
+
+  <!-- DISCLAIMER ──────────────────────────────────────────────────── -->
+  <section class="doc-section" id="disclaimer">
+    <div class="section-header">
+      <span class="section-sigil">§</span>
+      <h2>Disclaimer &amp; License</h2>
+    </div>
+    <div class="callout warn">
+      <div class="callout-label">⚠ Use at Your Own Risk</div>
+      <p style="margin-bottom: 10px;">These patches are not guaranteed to be 100% safe. While damage to save files is very unlikely, it is always a good idea to back up your saves before modding. <strong>If you cannot accept these risks, do not use Suzerain Unbound.</strong></p>
+      <p>Patches such as Force Achievements will <strong>permanently alter your Steam user profile</strong>. You may need a tool such as Steam Achievement Manager to revert those changes.</p>
+    </div>
+    <div class="compat-block" style="margin-top: 18px;">
+      <div class="compat-row">
+        <span class="compat-key">Suzerain Unbound</span>
+        <span class="compat-val">MIT License</span>
+      </div>
+      <div class="compat-row">
+        <span class="compat-key">BepInEx (included in Modloader bundle)</span>
+        <span class="compat-val">LGPL-2.1 License</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════ -->
+<footer>
+  <p>Suzerain Unbound — Community Mod — Not affiliated with Torpor Games</p>
+  <p style="margin-top: 6px;"><a href="https://github.com/KawaiiFiveO/SuzerainUnbound" target="_blank">View on GitHub</a> | made by <a href="https://onehalf.dev/" target="_blank">onehalf</a></p>
+</footer>
+
+<script>
+  function toggleDossier(header) {
+    const dossier = header.closest('.dossier');
+    const isOpen  = dossier.classList.contains('open');
+    dossier.classList.toggle('open', !isOpen);
+
+    const label  = header.querySelector('.toggle-label');
+    const body   = dossier.querySelector('.dossier-body');
+    label.textContent = isOpen ? 'Expand' : 'Collapse';
+    header.setAttribute('aria-expanded', String(!isOpen));
+    body.setAttribute('aria-hidden', String(isOpen));
+  }
+
+  // Keyboard support for dossier headers
+  document.querySelectorAll('.dossier-header').forEach(header => {
+    header.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleDossier(header);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

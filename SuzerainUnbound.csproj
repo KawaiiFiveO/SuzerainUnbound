@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>SuzerainUnbound</AssemblyName>
     <Product>Suzerain Unbound</Product>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
 	<BepInExPluginGuid>com.onehalf.suzerainunbound</BepInExPluginGuid>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
@@ -23,39 +23,43 @@
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(GameDir)\BepInEx\interop\Assembly-CSharp.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>$(GameDir)\BepInEx\interop\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Facepunch.Steamworks.Win64">
-      <HintPath>$(GameDir)\BepInEx\interop\Facepunch.Steamworks.Win64.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\Facepunch.Steamworks.Win64.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Febucci.TextAnimator.Runtime">
-      <HintPath>$(GameDir)\BepInEx\interop\Febucci.TextAnimator.Runtime.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\Febucci.TextAnimator.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>$(GameDir)\BepInEx\interop\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\Il2Cppmscorlib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.InputSystem">
-      <HintPath>$(GameDir)\BepInEx\interop\Unity.InputSystem.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\Unity.InputSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\UnityEngine.AudioModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(GameDir)\BepInEx\interop\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>$(GameDir)\BepInEx\interop\UnityEngine.UI.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>$(GameDir)\BepInEx\interop\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
