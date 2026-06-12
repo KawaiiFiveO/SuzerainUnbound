@@ -93,13 +93,11 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Known Issues
 
-**Torpor Mode Unlock**: The game might crash if you rapidly switch tabs on the New Story selection screen, so just don't go too crazy on that menu when starting a new game. Not sure yet what causes this.
-
-**General Crashes**: Vanilla Suzerain is already known to be unstable, so adding mods to it probably doesn't help.
+**General Crashes**: Vanilla Suzerain/BepInEx (Bleeding Edge) is already known to be unstable, so adding mods to it probably doesn't help.
 
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.1.0
+Latest release of Suzerain Unbound: v1.1.1
 
 Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
 
