@@ -1,5 +1,7 @@
 # Suzerain Unbound
 
+![preview](/docs/preview.png)
+
 Quality of Life patches for vanilla Suzerain. Remove limitations placed by the developers and add important features.
 
 ### Included patches
@@ -14,7 +16,7 @@ Each patch can be enabled or disabled in the configuration file.
 
 **Torpor Mode Unlock**: Suzerain forces Torpor Mode ON when playing on a fresh profile. This allows it to be set to OFF so that you can save your game.
 
-**Force Achievements**: Forces Steam achievements to unlock even if Torpor mode is off.
+**Force Achievements**: Forces Steam achievements to unlock even if Torpor Mode is off.
 
 Torpor Mode Unlock and Force Achievements are disabled by default because they are cheats that can alter your user profile or save files.
 
