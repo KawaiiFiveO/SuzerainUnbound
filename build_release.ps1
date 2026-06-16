@@ -2,11 +2,11 @@
 # Suzerain Unbound - Automated Release Build
 # ==========================================
 
-$version = "1.2.0"
+$version = "1.3.0"
 $modName = "SuzerainUnbound"
 
 # Paths
-$dllPath = "bin\Release\net6.0\SuzerainUnbound.dll"
+$dllFiles = "bin\Release\net6.0\*.dll"
 $assetsDir = "ReleaseAssets"
 $outputDir = "Releases"
 $stagingDir = "$outputDir\Staging"
@@ -37,8 +37,8 @@ Write-Host "Packaging Plugin-Only Build..."
 $pluginDir = "$stagingDir\PluginOnly"
 New-Item -ItemType Directory -Path $pluginDir | Out-Null
 
-# Copy DLL and Config
-Copy-Item $dllPath -Destination $pluginDir
+# Copy ALL DLLs and Config
+Copy-Item $dllFiles -Destination $pluginDir
 Copy-Item "$assetsDir\$configFile" -Destination $pluginDir
 
 # Read the README, replace the {{VERSION}} tag, and write it to the staging folder
@@ -79,7 +79,7 @@ if (!(Test-Path $pluginsPath)) { New-Item -ItemType Directory -Path $pluginsPath
 if (!(Test-Path $configPath)) { New-Item -ItemType Directory -Path $configPath | Out-Null }
 
 # Copy Mod Files
-Copy-Item $dllPath -Destination $pluginsPath
+Copy-Item $dllFiles -Destination $pluginsPath
 Copy-Item "$assetsDir\$configFile" -Destination $configPath
 
 # Read the README, replace the {{VERSION}} tag, and write it

@@ -22,6 +22,8 @@ Each patch can be enabled or disabled in the configuration file.
 
 **Fix Camera Edge Pan**: Prevents endless panning when the mouse is on a second monitor. Optionally, disable edge panning entirely. Enabled by default (edge fix).
 
+**Discord RPC**: Enables Discord Rich Presence for Suzerain, which displays info similar to Steam Rich Presence.
+
 **Torpor Mode Unlock**: Suzerain forces Torpor Mode ON when playing on a fresh profile. This allows it to be set to OFF so that you can save your game.
 
 **Force Achievements**: Forces Steam achievements to unlock even if Torpor Mode is off.
@@ -105,7 +107,7 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.2.0
+Latest release of Suzerain Unbound: v1.3.0
 
 Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
 

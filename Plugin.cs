@@ -1,12 +1,11 @@
 ﻿using BepInEx;
+using BepInEx.Configuration;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
-using BepInEx.Configuration;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
-using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace SuzerainUnbound;
 
@@ -27,6 +26,8 @@ public class Plugin : BasePlugin
     public static ConfigEntry<bool> EnableDotaCamera;
     public static ConfigEntry<int> SkippedPopupsCount;
     public static ConfigEntry<int> SkippedDialogueCount;
+    public static ConfigEntry<bool> EnableRichPresence;
+    public static ConfigEntry<bool> ShowStrangeRanks;
 
     public override void Load()
     {
@@ -49,11 +50,12 @@ public class Plugin : BasePlugin
         SkipSplashScreen = Config.Bind("Features", "SkipSplash", true, "Skips the Torpor Games intro logos.");
         EnableInstantText = Config.Bind("Features", "FastDialogue", true, "Instantly shows text on screen and enables Dialogue Skip.");
         // Bind the skip key, defaulting to LeftCtrl
-        SkipKey = Config.Bind("Controls", "DialogueSkipKey", DialogueSkipKey.LeftCtrl, "The key to hold down for fast-forwarding dialogue. Only used by FastDialogue if enabled.");
+        SkipKey = Config.Bind("Controls", "DialogueSkipKey", DialogueSkipKey.LeftCtrl, "The key to hold down for fast-forwarding dialogue. Only used if FastDialogue is enabled.");
         EnableBackgroundRun = Config.Bind("Features", "RunInBackground", BackgroundRunMode.muted, "Run In Background modes\ndisabled: Default game behavior.\nunmuted: Prevents the game from pausing or throttling framerate when Alt-Tabbed, but audio is not muted.\nmuted: Also mutes the game audio when you Alt-Tab out.");
         EnableConfirmSkip = Config.Bind("Features", "YesImSure", ConfirmSkipMode.skipIngame, "Yes I'm Sure modes\ndisabled: Never skip prompts.\nskipIngame: Automatically skip all in-game/setup 'Are you sure about your decisions?' prompts.\nskipAll: Also auto-skip all exit/quit/main-menu/load-checkpoint confirmations.");
         EdgePanMode = Config.Bind("Controls", "FixCameraEdgePan", MapPanMode.stopAtEdge, "Fix Camera Edge Pan modes\nvanilla: Default camera behavior.\nstopAtEdge: Prevents endless panning when the mouse is on a second monitor.\ndisabled: Turns off edge panning completely (use Right-Mouse or Middle-Mouse instead).");
         EnableDotaCamera = Config.Bind("Controls", "DotaCameraRebind", true, "Allow map dragging with Middle-Mouse Button. (Does not affect Right-Mouse.)");
+        EnableRichPresence = Config.Bind("Features", "DiscordRPC", true, "Enable Discord Rich Presence for Suzerain.");
 
         // Cheats are off by default
         EnableTorporUnlock = Config.Bind("Cheats", "TorporModeUnlock", false, "Allows disabling Torpor Mode on fresh saves.");
@@ -62,11 +64,11 @@ public class Plugin : BasePlugin
         // Track user stats
         SkippedPopupsCount = Config.Bind("Strange Counters", "Are You Sure Popups Skipped", 0, "The total number of times the YesImSure patch has saved you from having to click 'Yes' on a pointless confirmation popup.");
         SkippedDialogueCount = Config.Bind("Strange Counters", "Lines of Dialogue Skipped", 0, "The total number of times the DialogueSkipper has fired (regardless of whether it actually skipped anything).");
+        ShowStrangeRanks = Config.Bind("Strange Counters", "ShowStrangeRanks", true, "Display a rank-up message in the console when you reach a new Strange rank.");
         int totalPopupSkips = SkippedPopupsCount.Value;
         string strangePopupRank = GetStrangeRank(totalPopupSkips);
         int totalDialogueSkips = SkippedDialogueCount.Value;
         string strangeDialogueRank = GetStrangeRank(totalDialogueSkips);
-
 
         // 3. Create a single Harmony instance for our mod
         var harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
@@ -173,6 +175,20 @@ public class Plugin : BasePlugin
             }
         }
 
+        if (EnableRichPresence.Value)
+        {
+            try
+            {
+                harmony.PatchAll(typeof(RichPresencePatches));
+                DiscordRichPresence.Initialize(Log);
+                Log.LogInfo("[CONFIG] Discord Rich Presence patches applied.");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Discord Rich Presence patches failed to apply.");
+            }
+        }
+
         if (EnableTorporUnlock.Value)
         {
             try
@@ -202,9 +218,12 @@ public class Plugin : BasePlugin
         Log.LogInfo("All selected patches applied!");
 
         // Display user stats
-        Log.LogInfo("[STRANGE] COUNTERS:");
-        Log.LogInfo($"[STRANGE] {strangePopupRank} Popup Skipper — Skips: {totalPopupSkips}");
-        Log.LogInfo($"[STRANGE] {strangeDialogueRank} Dialogue Skipper — Skips: {totalDialogueSkips}");
+        if (ShowStrangeRanks.Value)
+        {
+            Log.LogInfo("[STRANGE] COUNTERS:");
+            Log.LogInfo($"[STRANGE] {strangePopupRank} Popup Skipper — Skips: {totalPopupSkips}");
+            Log.LogInfo($"[STRANGE] {strangeDialogueRank} Dialogue Skipper — Skips: {totalDialogueSkips}");
+        }
     }
 
     // This will give us a string representing the user's Strange rank
@@ -237,7 +256,7 @@ public class Plugin : BasePlugin
         int newCount = statConfig.Value;
         string newRank = GetStrangeRank(newCount);
 
-        if (oldRank != newRank)
+        if ((oldRank != newRank) && ShowStrangeRanks.Value)
         {
             Log.LogMessage($"[STRANGE] Your {itemName} has reached a new rank: {newRank}!");
         }
