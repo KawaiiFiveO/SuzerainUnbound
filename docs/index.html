@@ -232,6 +232,7 @@
       padding: 16px 18px 18px;
     }
     .patch-card.cheat { border-left-color: var(--red-seal); }
+    .patch-card.extra { border-left-color: var(--walnut); }
     .patch-name {
       font-family: 'Playfair Display', serif;
       font-weight: 700;
@@ -256,6 +257,7 @@
     }
     .patch-status.on  { color: var(--green-seal); border-color: var(--green-seal); }
     .patch-status.off { color: var(--red-seal);   border-color: var(--red-seal);   }
+    .patch-status.extra { color: var(--walnut);   border-color: var(--walnut);   }
 
     /* ── STEPS ───────────────────────────────────────────────────── */
     .steps { counter-reset: step; list-style: none; }
@@ -561,7 +563,7 @@
     <div class="banner-eyebrow">Quality-of-Life Mod for Suzerain</div>
     <h1 class="banner-title">Suzerain Unbound</h1>
     <div class="banner-subtitle">The Suzerain experience, refined.</div>
-    <div class="banner-version">Release v1.1.1</div>
+    <div class="banner-version">Release v1.2.0</div>
   </div>
 </header>
 
@@ -607,10 +609,28 @@
       <div class="patch-card">
         <div class="patch-name">Run In Background</div>
         <p class="patch-desc">Prevents the game from pausing or throttling its framerate when Alt-Tabbed, improving stability. Audio can also be muted automatically on tab-out.</p>
+        <span class="patch-status on">Enabled by default (muted)</span>
+      </div>
+
+      <div class="patch-card">
+        <div class="patch-name">Yes I'm Sure</div>
+        <p class="patch-desc">Automatically skip all in-game/setup "Are you sure about your decisions?" prompts. Optionally, also skip all system prompts (exit/quit/main-menu/load-checkpoint).</p>
+        <span class="patch-status on">Enabled by default (skip in-game)</span>
+      </div>
+
+      <div class="patch-card">
+        <div class="patch-name">Dota Camera Rebind</div>
+        <p class="patch-desc">Allow map dragging with the Middle-Mouse Button. (Does not affect Right-Mouse.)</p>
         <span class="patch-status on">Enabled by default</span>
       </div>
 
       <div class="patch-card">
+        <div class="patch-name">Fix Camera Edge Pan</div>
+        <p class="patch-desc">Prevents endless panning when the mouse is on a second monitor. Optionally, disable edge panning entirely.</p>
+        <span class="patch-status on">Enabled by default (edge fix)</span>
+      </div>
+
+      <div class="patch-card cheat">
         <div class="patch-name">Torpor Mode Unlock</div>
         <p class="patch-desc">Suzerain forces Torpor Mode ON for new profiles, blocking manual saves. This patch allows it to be turned OFF so you can save your game normally.</p>
         <span class="patch-status off">Disabled by default</span>
@@ -618,8 +638,14 @@
 
       <div class="patch-card cheat">
         <div class="patch-name">Force Achievements</div>
-        <p class="patch-desc">Forces Steam achievements to unlock regardless of whether Torpor Mode is active.</p>
+        <p class="patch-desc">Allows Steam achievements to be obtained regardless of whether Torpor Mode is active.</p>
         <span class="patch-status off">Disabled by default</span>
+      </div>
+      
+      <div class="patch-card extra">
+        <div class="patch-name">Strange Counters</div>
+        <p class="patch-desc">You can track your player stats!</p>
+        <span class="patch-status extra">Extras</span>
       </div>
 
     </div>
@@ -791,7 +817,7 @@ winhttp.dll</pre>
     <div class="compat-block">
       <div class="compat-row">
         <span class="compat-key">Suzerain Unbound version</span>
-        <span class="compat-val">v1.1.1</span>
+        <span class="compat-val">v1.2.0</span>
       </div>
       <div class="compat-row">
         <span class="compat-key">Tested with Suzerain</span>

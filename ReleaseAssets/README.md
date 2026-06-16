@@ -1,4 +1,4 @@
-# build
+# Build
 
 This directory contains assets used for the automated build process.
 

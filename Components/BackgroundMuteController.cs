@@ -13,7 +13,7 @@ public class BackgroundMuteController : MonoBehaviour
 
     void OnApplicationFocus(bool hasFocus)
     {
-        if (Plugin.MuteInBackground.Value)
+        if (Plugin.EnableBackgroundRun.Value == BackgroundRunMode.muted)
         {
             //Plugin.Log.LogInfo($"[BackgroundMute] Application focus changed to {hasFocus}");
             if (!hasFocus)

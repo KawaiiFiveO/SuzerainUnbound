@@ -4,6 +4,8 @@
 
 Quality of Life patches for vanilla Suzerain. Remove limitations placed by the developers and add important features.
 
+### [View Documentation Webpage](https://onehalf.dev/SuzerainUnbound/)
+
 ### Included patches
 
 Each patch can be enabled or disabled in the configuration file.
@@ -12,7 +14,13 @@ Each patch can be enabled or disabled in the configuration file.
 
 **Fast Dialogue**: Instantly shows text on screen (similar to `Typewriter` OFF) and enables **Dialogue Skip**, which allows you to hold a key down (default: `LeftCtrl`) to rapidly advance the dialogue. You can even skip unread text (which is not allowed by the `Skip Read Dialogue Text` menu option in vanilla). Enabled by default.
 
-**Run In Background**: Prevents the game from pausing or throttling framerate when Alt-Tabbed, which improves stability. Game audio can also be muted when tabbing out. Enabled by default.
+**Run In Background**: Prevents the game from pausing or throttling framerate when Alt-Tabbed, which improves stability. Game audio can also be muted when tabbing out. Enabled by default (muted).
+
+**Yes I'm Sure**: Automatically skip all in-game/setup "Are you sure about your decisions?" prompts. Optionally, skip all system prompts as well. Enabled by default (in-game only).
+
+**Dota Camera Rebind**: Allow map dragging with the Middle-Mouse Button. (Does not affect Right-Mouse.) Enabled by default.
+
+**Fix Camera Edge Pan**: Prevents endless panning when the mouse is on a second monitor. Optionally, disable edge panning entirely. Enabled by default (edge fix).
 
 **Torpor Mode Unlock**: Suzerain forces Torpor Mode ON when playing on a fresh profile. This allows it to be set to OFF so that you can save your game.
 
@@ -97,7 +105,7 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.1.1
+Latest release of Suzerain Unbound: v1.2.0
 
 Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
 

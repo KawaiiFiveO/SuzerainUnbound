@@ -3,13 +3,20 @@ using UnityEngine;
 
 namespace SuzerainUnbound;
 
+public enum BackgroundRunMode
+{
+    disabled,
+    unmuted,
+    muted
+}
+
 // 1. We use PersistenceManager.Awake just as a convenient "Game Startup" trigger
 [HarmonyPatch(typeof(PersistenceManager), "Awake")]
 public class BackgroundExecutionPatch
 {
     static void Postfix()
     {
-        if (Plugin.EnableBackgroundRun.Value)
+        if (Plugin.EnableBackgroundRun.Value != BackgroundRunMode.disabled)
         {
             // Tells the core Unity C++ engine to never suspend the main thread
             Application.runInBackground = true;
@@ -25,7 +32,7 @@ public class AlwaysFocusedPatch
     static void Postfix(ref bool __result)
     {
         // If our setting is enabled, overwrite whatever Unity returned with 'true'
-        if (Plugin.EnableBackgroundRun.Value)
+        if (Plugin.EnableBackgroundRun.Value != BackgroundRunMode.disabled)
         {
             __result = true;
         }

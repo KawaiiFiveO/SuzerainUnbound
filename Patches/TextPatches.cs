@@ -21,7 +21,7 @@ public class InstantTextPatch
 
         if (!_hasLogged)
         {
-            Plugin.Log.LogInfo("[Instant Text] Globally disabled TextAnimator fade-in appearances and set text speed to instant!");
+            Plugin.Log.LogInfo("[FastDialogue] Globally disabled TextAnimator fade-in appearances and set text speed to instant!");
             _hasLogged = true;
         }
 
