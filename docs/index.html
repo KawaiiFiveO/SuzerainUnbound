@@ -809,8 +809,12 @@ winhttp.dll</pre>
     </div>
     <ul class="issues-list">
       <li>
+        <strong>Fix Camera Edge Pan</strong>
+        The fix that prevents endless panning when the mouse is moved off the screen (default: <code>stopAtEdge</code>) only works on Windows. Other platforms must use the <code>vanilla</code> or <code>disabled</code> modes.
+      </li>
+      <li>
         <strong>General Crashes</strong>
-        Suzerain and BepInEx (Bleeding Edge) are known to be unstable; some patches may compound this. If you experience crashes, try disabling patches one at a time to isolate the cause.
+        Suzerain and BepInEx (Bleeding Edge) are known to be unstable; some patches may compound this. If you experience crashes, you can try disabling patches one at a time to isolate the cause — but it could be the fault of Suzerain Unbound, BepInEx, or even Unity itself. Crashes are intermittent, but if you find a way to reproduce one consistently, please submit an <a href="https://github.com/KawaiiFiveO/SuzerainUnbound/issues" target="_blank">issue report</a> with logs!
       </li>
     </ul>
   </section>
@@ -827,16 +831,16 @@ winhttp.dll</pre>
         <span class="compat-val">v1.2.0</span>
       </div>
       <div class="compat-row">
+        <span class="compat-key">BepInEx required</span>
+        <span class="compat-val">6.0 IL2CPP Bleeding Edge (build #764)</span>
+      </div>
+      <div class="compat-row">
         <span class="compat-key">Tested with Suzerain</span>
         <span class="compat-val">3.1.0 (Windows) — Build 175</span>
       </div>
       <div class="compat-row">
         <span class="compat-key">Rizia DLC</span>
         <span class="compat-val good">Compatible, optional</span>
-      </div>
-      <div class="compat-row">
-        <span class="compat-key">BepInEx required</span>
-        <span class="compat-val">6.0 IL2CPP Bleeding Edge (build #764)</span>
       </div>
       <div class="compat-row">
         <span class="compat-key">MelonLoader mods</span>
