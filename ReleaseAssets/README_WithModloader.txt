@@ -13,3 +13,4 @@ Launch the game and wait 1-2 minutes on the first boot for BepInEx to initialize
 More info:
 https://onehalf.dev/SuzerainUnbound
 https://github.com/KawaiiFiveO/SuzerainUnbound
+https://www.nexusmods.com/suzerain/mods/9

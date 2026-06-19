@@ -84,7 +84,7 @@ namespace SuzerainUnbound
             {
                 Plugin.Log.LogInfo($"[YesImSure] Auto-confirmed and skipped popup: {t.Label}");
 
-                Plugin.IncrementStrangeStat(Plugin.SkippedPopupsCount, "Popup Skipper");
+                StrangeRanks.IncrementStrangeStat(Plugin.SkippedPopupsCount, "Popup Skipper");
 
                 return false; // suppress -> no dialog
             }

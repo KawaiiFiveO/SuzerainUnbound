@@ -19,13 +19,17 @@ public class Plugin : BasePlugin
     public static ConfigEntry<bool> EnableAchievements;
     public static ConfigEntry<bool> SkipSplashScreen;
     public static ConfigEntry<bool> EnableInstantText;
-    public static ConfigEntry<DialogueSkipKey> SkipKey;
+    public static ConfigEntry<CustomKey> SkipKey;
+    public static ConfigEntry<bool> ReadAllReports;
+    public static ConfigEntry<CustomKey> ReadAllMapReportsKey;
+    public static ConfigEntry<CustomKey> ReadAllArticlesKey;
     public static ConfigEntry<BackgroundRunMode> EnableBackgroundRun;
     public static ConfigEntry<ConfirmSkipMode> EnableConfirmSkip;
     public static ConfigEntry<MapPanMode> EdgePanMode;
     public static ConfigEntry<bool> EnableDotaCamera;
     public static ConfigEntry<int> SkippedPopupsCount;
     public static ConfigEntry<int> SkippedDialogueCount;
+    public static ConfigEntry<int> ReportsReadCount;
     public static ConfigEntry<bool> EnableRichPresence;
     public static ConfigEntry<bool> ShowStrangeRanks;
 
@@ -48,9 +52,14 @@ public class Plugin : BasePlugin
         // 2. Bind the configs. (Category, Name, Default Value, Description)
         // This generates a text file in BepInEx/config/com.onehalf.suzerainunbound.cfg
         SkipSplashScreen = Config.Bind("Features", "SkipSplash", true, "Skips the Torpor Games intro logos.");
+
         EnableInstantText = Config.Bind("Features", "FastDialogue", true, "Instantly shows text on screen and enables Dialogue Skip.");
-        // Bind the skip key, defaulting to LeftCtrl
-        SkipKey = Config.Bind("Controls", "DialogueSkipKey", DialogueSkipKey.LeftCtrl, "The key to hold down for fast-forwarding dialogue. Only used if FastDialogue is enabled.");
+        SkipKey = Config.Bind("Controls", "DialogueSkipKey", CustomKey.LeftCtrl, "(FastDialogue) The key to hold down for fast-forwarding dialogue.");
+
+        ReadAllReports = Config.Bind("Features", "ReadAllReports", true, "Enables keybinds to instantly mark all pending map reports or news articles as read.");
+        ReadAllMapReportsKey = Config.Bind("Controls", "ReadAllMapReportsKey", CustomKey.F1, "(ReadAllReports) Key to mark all pending map reports as read.");
+        ReadAllArticlesKey = Config.Bind("Controls", "ReadAllArticlesKey", CustomKey.F2, "(ReadAllReports) Key to mark all pending news articles as read.");
+
         EnableBackgroundRun = Config.Bind("Features", "RunInBackground", BackgroundRunMode.muted, "Run In Background modes\ndisabled: Default game behavior.\nunmuted: Prevents the game from pausing or throttling framerate when Alt-Tabbed, but audio is not muted.\nmuted: Also mutes the game audio when you Alt-Tab out.");
         EnableConfirmSkip = Config.Bind("Features", "YesImSure", ConfirmSkipMode.skipIngame, "Yes I'm Sure modes\ndisabled: Never skip prompts.\nskipIngame: Automatically skip all in-game/setup 'Are you sure about your decisions?' prompts.\nskipAll: Also auto-skip all exit/quit/main-menu/load-checkpoint confirmations.");
         EdgePanMode = Config.Bind("Controls", "FixCameraEdgePan", MapPanMode.stopAtEdge, "Fix Camera Edge Pan modes\nvanilla: Default camera behavior.\nstopAtEdge: Prevents endless panning when the mouse is on a second monitor.\ndisabled: Turns off edge panning completely (use Right-Mouse or Middle-Mouse instead).");
@@ -62,13 +71,10 @@ public class Plugin : BasePlugin
         EnableAchievements = Config.Bind("Cheats", "ForceAchievements", false, "Forces Steam achievements to unlock even if Torpor Mode is off.");
 
         // Track user stats
-        SkippedPopupsCount = Config.Bind("Strange Counters", "Are You Sure Popups Skipped", 0, "The total number of times the YesImSure patch has saved you from having to click 'Yes' on a pointless confirmation popup.");
-        SkippedDialogueCount = Config.Bind("Strange Counters", "Lines of Dialogue Skipped", 0, "The total number of times the DialogueSkipper has fired (regardless of whether it actually skipped anything).");
+        SkippedPopupsCount = Config.Bind("Strange Counters", "Are You Sure Popups Skipped", 0, "The total number of times the Yes I'm Sure patch has saved you from having to click 'Yes' on a pointless confirmation popup.");
+        SkippedDialogueCount = Config.Bind("Strange Counters", "Lines of Dialogue Skipped", 0, "The total number of times the Dialogue Skipper has fired (regardless of whether it actually skipped anything).");
+        ReportsReadCount = Config.Bind("Strange Counters", "Reports and Articles Read", 0, "The total number of map reports and news articles marked as read via the Read All Reports patch.");
         ShowStrangeRanks = Config.Bind("Strange Counters", "ShowStrangeRanks", true, "Display a rank-up message in the console when you reach a new Strange rank.");
-        int totalPopupSkips = SkippedPopupsCount.Value;
-        string strangePopupRank = GetStrangeRank(totalPopupSkips);
-        int totalDialogueSkips = SkippedDialogueCount.Value;
-        string strangeDialogueRank = GetStrangeRank(totalDialogueSkips);
 
         // 3. Create a single Harmony instance for our mod
         var harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
@@ -189,6 +195,22 @@ public class Plugin : BasePlugin
             }
         }
 
+        if (ReadAllReports.Value)
+        {
+            try
+            {
+                ClassInjector.RegisterTypeInIl2Cpp<ReadAllController>();
+                var readerObject = new GameObject("SuzerainReadAllController");
+                readerObject.AddComponent<ReadAllController>();
+                GameObject.DontDestroyOnLoad(readerObject);
+                Log.LogInfo($"[CONFIG] Read All Reports injected! Press '{ReadAllMapReportsKey.Value}' for map reports, '{ReadAllArticlesKey.Value}' for news articles.");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Read All Reports failed to inject.");
+            }
+        }
+
         if (EnableTorporUnlock.Value)
         {
             try
@@ -220,45 +242,7 @@ public class Plugin : BasePlugin
         // Display user stats
         if (ShowStrangeRanks.Value)
         {
-            Log.LogInfo("[STRANGE] COUNTERS:");
-            Log.LogInfo($"[STRANGE] {strangePopupRank} Popup Skipper — Skips: {totalPopupSkips}");
-            Log.LogInfo($"[STRANGE] {strangeDialogueRank} Dialogue Skipper — Skips: {totalDialogueSkips}");
-        }
-    }
-
-    // This will give us a string representing the user's Strange rank
-    public static string GetStrangeRank(int count)
-    {
-        if (count >= 8500) return "Rayne's Own";
-        if (count >= 7500) return "Assembly-Clearing";
-        if (count >= 5000) return "Constitution-Melting";
-        if (count >= 2500) return "Positively Petr's Own";
-        if (count >= 1500) return "Wicked Malenyevist";
-        if (count >= 1000) return "Veto-Spattered";
-        if (count >= 999) return "Totally Ordinary";
-        if (count >= 750) return "Spectacularly Rizian";
-        if (count >= 500) return "Truly Soll-like";
-        if (count >= 250) return "Sufficiently Sordish";
-        if (count >= 100) return "Notably Reformist";
-        if (count >= 50) return "Somewhat Dictatorial";
-        if (count >= 25) return "Mildly Presidential";
-        if (count >= 10) return "Scarcely Decisive";
-
-        return "Unremarkable";
-    }
-
-    public static void IncrementStrangeStat(ConfigEntry<int> statConfig, string itemName)
-    {
-        int oldCount = statConfig.Value;
-        string oldRank = GetStrangeRank(oldCount);
-
-        statConfig.Value++;
-        int newCount = statConfig.Value;
-        string newRank = GetStrangeRank(newCount);
-
-        if ((oldRank != newRank) && ShowStrangeRanks.Value)
-        {
-            Log.LogMessage($"[STRANGE] Your {itemName} has reached a new rank: {newRank}!");
+            StrangeRanks.Display();
         }
     }
 }

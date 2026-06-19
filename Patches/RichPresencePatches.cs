@@ -101,7 +101,7 @@ namespace SuzerainUnbound
         {
             if (string.IsNullOrEmpty(action)) return;
 
-            DiscordRichPresence.Log.LogInfo($"[DiscordRPC] SetRichPresence called with action=\"{action}\"");
+            DiscordRichPresence.Log.LogDebug($"[DiscordRPC] SetRichPresence called with action=\"{action}\"");
 
             // Split the game's string into a maximum of 3 pieces wherever there is a comma
             string[] parts = action.Split(new[] { ", " }, 3, StringSplitOptions.None);
@@ -118,7 +118,7 @@ namespace SuzerainUnbound
         [HarmonyPatch(typeof(SteamRichPresenceManager), nameof(SteamRichPresenceManager.ClearRichPresence))]
         public static void OnClearRichPresence()
         {
-            DiscordRichPresence.Log.LogInfo("[DiscordRPC] ClearRichPresence called.");
+            DiscordRichPresence.Log.LogDebug("[DiscordRPC] ClearRichPresence called.");
             DiscordRichPresence.UpdateFromGame("Playing Suzerain", "", "");
         }
     }
