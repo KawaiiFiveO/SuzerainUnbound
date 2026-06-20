@@ -32,6 +32,7 @@ public class Plugin : BasePlugin
     public static ConfigEntry<int> ReportsReadCount;
     public static ConfigEntry<bool> EnableRichPresence;
     public static ConfigEntry<bool> ShowStrangeRanks;
+    public static ConfigEntry<ColorblindPalette> ColorblindMode;
 
     public override void Load()
     {
@@ -61,10 +62,13 @@ public class Plugin : BasePlugin
         ReadAllArticlesKey = Config.Bind("Controls", "ReadAllArticlesKey", CustomKey.F2, "(ReadAllReports) Key to mark all pending news articles as read.");
 
         EnableBackgroundRun = Config.Bind("Features", "RunInBackground", BackgroundRunMode.muted, "Run In Background modes\ndisabled: Default game behavior.\nunmuted: Prevents the game from pausing or throttling framerate when Alt-Tabbed, but audio is not muted.\nmuted: Also mutes the game audio when you Alt-Tab out.");
-        EnableConfirmSkip = Config.Bind("Features", "YesImSure", ConfirmSkipMode.skipIngame, "Yes I'm Sure modes\ndisabled: Never skip prompts.\nskipIngame: Automatically skip all in-game/setup 'Are you sure about your decisions?' prompts.\nskipAll: Also auto-skip all exit/quit/main-menu/load-checkpoint confirmations.");
+        EnableConfirmSkip = Config.Bind("Features", "YesImSure", ConfirmSkipMode.skipIngame, "Yes I'm Sure modes\ndisabled: Never skip prompts.\nskipIngame: Automatically skip all in-game/setup 'Are you sure about your decisions?' prompts.\nskipAll: Also auto-skip all apply/quit/main-menu/load-checkpoint confirmations.");
         EdgePanMode = Config.Bind("Controls", "FixCameraEdgePan", MapPanMode.stopAtEdge, "Fix Camera Edge Pan modes\nvanilla: Default camera behavior.\nstopAtEdge: Prevents endless panning when the mouse is on a second monitor.\ndisabled: Turns off edge panning completely (use Right-Mouse or Middle-Mouse instead).");
         EnableDotaCamera = Config.Bind("Controls", "DotaCameraRebind", true, "Allow map dragging with Middle-Mouse Button. (Does not affect Right-Mouse.)");
         EnableRichPresence = Config.Bind("Features", "DiscordRPC", true, "Enable Discord Rich Presence for Suzerain.");
+
+        // Accessibility patches
+        ColorblindMode = Config.Bind("Accessibility", "ColorblindMode", ColorblindPalette.vanilla, "Colorblind-friendly color palette for Overview panel/Economy situation severity (Low/Medium/High).\nvanilla: Game default (green/yellow/red).\nblueOrange: Blue/amber/orange stoplight.\nokabeIto: Okabe-Ito universal design palette.\nibm: IBM colorblind-safe palette.\ntritanopia: Optimized for tritanopia (blue-yellow colorblindness).\ngraves: A fun pastel palette. Decorative, not intended for actual colorblind use.");
 
         // Cheats are off by default
         EnableTorporUnlock = Config.Bind("Cheats", "TorporModeUnlock", false, "Allows disabling Torpor Mode on fresh saves.");
@@ -208,6 +212,19 @@ public class Plugin : BasePlugin
             catch
             {
                 Log.LogWarning("[CONFIG] Read All Reports failed to inject.");
+            }
+        }
+
+        if (ColorblindMode.Value != ColorblindPalette.vanilla)
+        {
+            try
+            {
+                ColorblindPatches.ApplyAll(harmony);
+                Log.LogInfo($"[CONFIG] Colorblind Mode patches applied. Palette: {ColorblindMode.Value}");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Colorblind Mode patch failed to apply.");
             }
         }
 

@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>SuzerainUnbound</AssemblyName>
     <Product>Suzerain Unbound</Product>
-    <Version>1.4.1</Version>
+    <Version>1.5.0</Version>
 	<BepInExPluginGuid>com.onehalf.suzerainunbound</BepInExPluginGuid>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
@@ -62,6 +62,10 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>F:\SteamLibrary\steamapps\common\Suzerain\BepInEx\interop\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">

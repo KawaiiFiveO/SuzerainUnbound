@@ -26,6 +26,8 @@ Each patch can be enabled or disabled in the configuration file.
 
 **Read All Reports:** Press a key to instantly mark all pending map reports or news articles as read (default: `F1`/`F2`).
 
+**Colorblind Friendly:** Set a colorblind-friendly palette for certain indicators that were green/yellow/red by default.
+
 **Torpor Mode Unlock**: Suzerain forces Torpor Mode ON when playing on a fresh profile. This allows it to be set to OFF so that you can save your game.
 
 **Force Achievements**: Forces Steam achievements to unlock even if Torpor Mode is off.
@@ -105,11 +107,13 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Known Issues
 
+**Fix Camera Edge Pan:** The fix that prevents endless panning when the mouse is moved off the screen (default: `stopAtEdge`) only works on Windows. Other platforms must use the `vanilla` or `disabled` modes. 
+
 **General Crashes**: Vanilla Suzerain/BepInEx (Bleeding Edge) is already known to be unstable, so adding mods to it probably doesn't help.
 
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.4.1
+Latest release of Suzerain Unbound: v1.5.0
 
 Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
 

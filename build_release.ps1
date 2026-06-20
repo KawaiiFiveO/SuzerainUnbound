@@ -2,7 +2,7 @@
 # Suzerain Unbound - Automated Release Build
 # ==========================================
 
-$version = "1.4.1"
+$version = "1.5.0"
 $modName = "SuzerainUnbound"
 
 # Paths
