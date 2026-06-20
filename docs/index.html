@@ -621,7 +621,7 @@
 
       <div class="patch-card">
         <div class="patch-name">Yes I'm Sure</div>
-        <p class="patch-desc">Automatically skip all in-game/setup "Are you sure about your decisions?" prompts. Optionally, also skip all system prompts (exit/quit/main-menu/load-checkpoint).</p>
+        <p class="patch-desc">Automatically skip all in-game/setup "Are you sure about your decisions?" prompts. Optionally, also skip all system prompts (apply/quit/main-menu/load-checkpoint).</p>
         <span class="patch-status on">Enabled by default (skip in-game)</span>
       </div>
 
@@ -633,7 +633,7 @@
 
       <div class="patch-card">
         <div class="patch-name">Fix Camera Edge Pan</div>
-        <p class="patch-desc">Prevents endless panning when the mouse is on a second monitor. Optionally, disable edge panning entirely.</p>
+        <p class="patch-desc">Prevents endless panning when the mouse is outside of the game window. Optionally, disable edge panning entirely.</p>
         <span class="patch-status on">Enabled by default (edge fix)</span>
       </div>
       
@@ -645,7 +645,7 @@
       
       <div class="patch-card">
         <div class="patch-name">Read All Reports</div>
-        <p class="patch-desc">Press a key to instantly mark all pending map reports or news articles as read (default: <code>F1</code>/<code>F2</code>).</p>
+        <p class="patch-desc">Press a key (default: <code>F1</code>/<code>F2</code>) to instantly mark all pending map reports or news articles as read.</p>
         <span class="patch-status on">Enabled by default</span>
       </div>
 
@@ -715,7 +715,8 @@
     </ol>
 
     <h3>After a Game Update</h3>
-    <p>If Suzerain receives an update, Suzerain Unbound will stop working. The <code>BepInEx/interop</code> folder must be deleted before the game will launch again. The safest approach is to fully uninstall BepInEx (see below), then install a new "With Modloader" release once one is available.</p>
+    <p>If Suzerain receives an update, Suzerain Unbound will stop working. You must disable the plugin and delete the <code>BepInEx/interop</code> folder before launching the game again. The safest approach is to fully uninstall BepInEx (see below), then install a new "With Modloader" release once one is available.</p>
+    <p>Make a copy of your configuration file if you'd like to keep your settings. (Note: After reinstalling, it is better to modify the new configuration file instead of overwriting it with the backup, as updates may add new options.)</p>
   </section>
 
   <!-- UNINSTALL ───────────────────────────────────────────────────── -->
@@ -725,8 +726,10 @@
       <h2>Uninstalling</h2>
     </div>
     <p>To <strong>temporarily disable</strong> BepInEx without uninstalling, rename the <code>BepInEx</code> folder to something else (e.g. <code>zBepInEx</code>). The mod loader will not run until you rename it back.</p>
-    <p>To disable <strong>only Suzerain Unbound</strong>, remove <code>SuzerainUnbound.dll</code> from the plugins folder:</p>
-    <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound.dll</pre>
+    <p>To disable <strong>only Suzerain Unbound</strong>, remove the DLLs from the plugins folder:</p>
+    <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound.dll
+Suzerain/BepInEx/plugins/DiscordRPC.dll
+Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
     <p>To <strong>fully revert to vanilla</strong>, delete the following items from your Suzerain directory, then re-verify files on Steam if needed:</p>
     <pre class="code-block">BepInEx/            (folder)
 dotnet/             (folder)
@@ -751,8 +754,10 @@ winhttp.dll</pre>
     </div>
     <div class="dossier-body" aria-hidden="true">
       <div class="dossier-body-inner">
-        <p>If you already have <strong>BepInEx 6.0</strong> installed and want to run Suzerain Unbound alongside other mods, or you want to install BepInEx manually, download the "Plugin Only" release instead and drop the DLL directly into your existing plugins folder:</p>
-        <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound.dll</pre>
+        <p>If you already have <strong>BepInEx 6.0</strong> installed and want to run Suzerain Unbound alongside other mods, or you want to install BepInEx manually, download the "Plugin Only" release instead and drop the DLLs directly into your existing plugins folder:</p>
+        <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound.dll
+Suzerain/BepInEx/plugins/DiscordRPC.dll
+Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
         <div class="callout warn">
           <div class="callout-label">⚠ Version Requirement</div>
           <p>This plugin requires <strong>BepInEx 6.0 (IL2CPP) Bleeding Edge</strong>, tested on build #764. It will <strong>not</strong> work on BepInEx 5.x. If you do not have existing mods and do not want to install BepInEx manually, use the "With Modloader" bundle instead — it includes everything pre-configured.</p>
@@ -826,8 +831,13 @@ winhttp.dll</pre>
       </li>
       <li>
         <strong>General Crashes</strong>
-        Suzerain and BepInEx (Bleeding Edge) are known to be unstable; some patches may compound this. If you experience crashes, you can try disabling patches one at a time to isolate the cause — but it could be the fault of Suzerain Unbound, BepInEx, or even Unity itself. Crashes are intermittent, but if you find a way to reproduce one consistently, please submit an <a href="https://github.com/KawaiiFiveO/SuzerainUnbound/issues" target="_blank">issue report</a> with logs!
+        Suzerain and BepInEx (Bleeding Edge) are known to be unstable; some patches may compound this. Crashes are rare, but if you find a way to reproduce one consistently, please submit an issue report with logs!
       </li>
+    <div class="callout warn" style="margin-top: 18px;">
+      <div class="callout-label">⚠ Report Issues</div>
+      <p>Experiencing an issue that isn't listed here? Submit an issue report if a patch is broken and you are using the correct version of Suzerain Unbound for your game (see <a href="#compatibility">Compatibility</a>). Include log files from the <code>Suzerain/BepInEx</code> folder in your report, along with any relevant save files.</p>
+      <a class="btn-link" href="https://github.com/KawaiiFiveO/SuzerainUnbound/issues" target="_blank">Report an Issue →</a>
+    </div>
     </ul>
   </section>
 
@@ -861,7 +871,7 @@ winhttp.dll</pre>
     </div>
     <div class="callout warn" style="margin-top: 18px;">
       <div class="callout-label">⚠ After a Major Game Update</div>
-      <p>Suzerain Unbound will break if the game receives a major update. If the latest release is outdated, you must disable or uninstall BepInEx entirely to play vanilla Suzerain in the interim. Submit an <a href="https://github.com/KawaiiFiveO/SuzerainUnbound/issues" target="_blank">issue report</a> if a patch is broken — include log files from the <code>Suzerain/BepInEx</code> folder in your report.</p>
+      <p>Suzerain Unbound will break if the game receives a major update. If the latest release is outdated, you must <a href="#uninstall">disable or uninstall BepInEx entirely</a> to play vanilla Suzerain in the interim.</p>
     </div>
   </section>
 
