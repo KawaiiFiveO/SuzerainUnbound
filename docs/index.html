@@ -649,6 +649,19 @@
         <span class="patch-status on">Enabled by default</span>
       </div>
 
+      <div class="patch-card extra">
+        <div class="patch-name">Strange Counters</div>
+        <p class="patch-desc">You can track your player stats!</p>
+        <span class="patch-status extra">Extras</span>
+      </div>
+
+    </div>
+    <div class="callout warn" style="margin-top: 20px;">
+      <div class="callout-label">⚠ Cheat Patches</div>
+      <p>The following patches are disabled by default. Enabling them may permanently alter your save files or Steam profile. Do not enable these unless you fully understand their effects.</p>
+    </div>
+    
+    <div class="patch-grid">
       <div class="patch-card cheat">
         <div class="patch-name">Torpor Mode Unlock</div>
         <p class="patch-desc">Suzerain forces Torpor Mode ON for new profiles, blocking manual saves. This patch allows it to be turned OFF so you can save your game normally.</p>
@@ -659,18 +672,7 @@
         <div class="patch-name">Force Achievements</div>
         <p class="patch-desc">Allows Steam achievements to be obtained regardless of whether Torpor Mode is active.</p>
         <span class="patch-status off">Disabled by default</span>
-      </div>
-
-      <div class="patch-card extra">
-        <div class="patch-name">Strange Counters</div>
-        <p class="patch-desc">You can track your player stats!</p>
-        <span class="patch-status extra">Extras</span>
-      </div>
-
-    </div>
-    <div class="callout warn" style="margin-top: 20px;">
-      <div class="callout-label">⚠ Cheat Patches</div>
-      <p>Torpor Mode Unlock and Force Achievements are disabled by default. Enabling them may permanently alter your save files or Steam profile. Do not enable these unless you fully understand their effects.</p>
+      </div>      
     </div>
   </section>
 
@@ -715,7 +717,7 @@
     </ol>
 
     <h3>After a Game Update</h3>
-    <p>If Suzerain receives an update, Suzerain Unbound will stop working. You must disable the plugin and delete the <code>BepInEx/interop</code> folder before launching the game again. The safest approach is to fully uninstall BepInEx (see below), then install a new "With Modloader" release once one is available.</p>
+    <p>If Suzerain receives an update, Suzerain Unbound will stop working. The safest approach is to fully uninstall BepInEx (see below), then install a new "With Modloader" release once one is available.</p>
     <p>Make a copy of your configuration file if you'd like to keep your settings. (Note: After reinstalling, it is better to modify the new configuration file instead of overwriting it with the backup, as updates may add new options.)</p>
   </section>
 
@@ -758,6 +760,8 @@ winhttp.dll</pre>
         <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound.dll
 Suzerain/BepInEx/plugins/DiscordRPC.dll
 Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
+        <p>You can use this method to update Suzerain Unbound without updating the modloader. Sometimes, a plugin update will be released on the same BepInEx version, in which case you do not need the "With Modloader" release.</p>
+        <p>If the game itself was updated, delete the <code>BepInEx/interop</code> folder before launching the game again.</p>
         <div class="callout warn">
           <div class="callout-label">⚠ Version Requirement</div>
           <p>This plugin requires <strong>BepInEx 6.0 (IL2CPP) Bleeding Edge</strong>, tested on build #764. It will <strong>not</strong> work on BepInEx 5.x. If you do not have existing mods and do not want to install BepInEx manually, use the "With Modloader" bundle instead — it includes everything pre-configured.</p>
@@ -790,6 +794,7 @@ Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
           <li><strong>BepInEx 6.0 (IL2CPP) Bleeding Edge</strong> must be installed in the game directory (tested on build #764). Standard BepInEx 5.x will not work.</li>
           <li>Launch the game <strong>at least once</strong> with BepInEx active to generate the <code>BepInEx/interop</code> assemblies. If a game update occurs, delete this folder to regenerate them, then re-link in the project.</li>
         </ul>
+        <a class="btn-link" href="https://builds.bepinex.dev/projects/bepinex_be" target="_blank">BepInEx Bleeding Edge Builds →</a>
 
         <h3>Linking Your Game Files</h3>
         <ol class="steps">
