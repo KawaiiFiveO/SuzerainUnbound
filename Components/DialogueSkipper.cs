@@ -10,6 +10,7 @@ public class DialogueSkipper : MonoBehaviour
     public DialogueSkipper(IntPtr ptr) : base(ptr) { }
 
     private float _nextAdvanceTime = 0f;
+    private OneTimeDecreesPanel _decreePanel;
 
     void Update()
     {
@@ -23,6 +24,14 @@ public class DialogueSkipper : MonoBehaviour
             {
                 if (Time.time >= _nextAdvanceTime)
                 {
+                    // ConversationPanel.PauseConversation() is a game-level pause that doesn't
+                    // block OnContinueConversation() at the PixelCrushers level. Guard manually:
+                    // don't advance dialogue while a game panel is overriding the conversation.
+                    if (_decreePanel == null)
+                        _decreePanel = FindObjectOfType<OneTimeDecreesPanel>();
+                    if (_decreePanel != null && _decreePanel.IsShowing())
+                        return;
+
                     DialogueManager.standardDialogueUI.OnContinueConversation();
                     _nextAdvanceTime = Time.time + 0.15f;
 

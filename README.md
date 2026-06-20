@@ -24,7 +24,7 @@ Each patch can be enabled or disabled in the configuration file.
 
 **Discord RPC**: Enables Discord Rich Presence for Suzerain, which displays info similar to Steam Rich Presence.
 
-**Read All Reports:** Press a key to instantly mark all pending map reports or news articles as read (default: F1/F2).
+**Read All Reports:** Press a key to instantly mark all pending map reports or news articles as read (default: `F1`/`F2`).
 
 **Torpor Mode Unlock**: Suzerain forces Torpor Mode ON when playing on a fresh profile. This allows it to be set to OFF so that you can save your game.
 
@@ -109,7 +109,7 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.4.0
+Latest release of Suzerain Unbound: v1.4.1
 
 Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
 

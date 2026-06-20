@@ -1,7 +1,10 @@
-﻿using HarmonyLib;
+using HarmonyLib;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.InteropTypes;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace SuzerainUnbound
 {
@@ -35,15 +38,18 @@ namespace SuzerainUnbound
 
         private static readonly Target[] Targets =
         {
-            //          declaring type                method                          confirm lambda                           system?  label
+            //                declaring type                method                          confirm lambda                          system? label
             new Target(typeof(PagedDecisionPanel),          "OnFinish",                     "_OnFinish_b__48_1",                     false, "Decisions"),
             new Target(typeof(WarProductionPanel),          "OnTrainButtonClick",           "_OnTrainButtonClick_b__93_1",           false, "WarProduction"),
             new Target(typeof(SkipProloguePanel),           "OnConfirmClick",               "_OnConfirmClick_b__24_0",               false, "SkipPrologue"),
             new Target(typeof(TemplateArchetypeSlot),       "OnSelectArchetypeButtonClick", "_OnSelectArchetypeButtonClick_b__17_0", false, "Archetype"),
             new Target(typeof(CharacterCustomizationPanel), "OnFinish",                     "_OnFinish_b__33_0",                     false, "Customization"),
             new Target(typeof(LoadArchetypePanel),          "OnConfirmSaveFileSelection",   "_OnConfirmSaveFileSelection_b__21_0",   false, "LoadArchetype"),
+            new Target(typeof(DecreeDetailsPage),           "OnSignClick",                  "_OnSignClick_b__0",                     false, "DecreeSign"),
+            new Target(typeof(OneTimeDecreesPanel),         "OnFinishButtonClick",          "_OnFinishButtonClick_b__37_0",          false, "OneTimeDecrees"),
 
             // --- system / destructive: only skipped when SkipSystem is enabled ---
+            new Target(typeof(OptionsPage),                 "OnApplyClick",                 "_OnApplyClick_b__41_1",                 true,  "ApplySettings"),
             new Target(typeof(EscapeMenuPanel),             "OnMainMenuClick",              "_OnMainMenuClick_b__72_0",              true,  "BackToMainMenu"),
             new Target(typeof(MainMenuPanel),               "OnExitClick",                  "_OnExitClick_b__87_0",                  true,  "ExitGame (MainMenu)"),   // lambda on <>c
             new Target(typeof(EscapeMenuPanel),             "OnExitClick",                  "_OnExitClick_b__75_0",                  true,  "ExitGame (EscapeMenu)"), // lambda on <>c
@@ -113,16 +119,38 @@ namespace SuzerainUnbound
                     MethodInfo nm = FindMethod(nt, lambdaName);
                     if (nm == null) continue;
 
-                    // These cached lambdas capture no instance state, so any display-class instance
-                    // works. Prefer the compiler's cached singleton; fall back to a fresh instance.
-                    // (The singleton may be exposed as a property rather than a field, and may be
-                    // null anyway because we skip the original method before its static ctor runs.)
-                    object target = GetDisplayClassSingleton(nt) ?? CreateInstance(nt);
+                    // Prefer the compiler's cached singleton (non-capturing <>c lambdas); fall back
+                    // to a fresh instance (instance-capturing display classes like c__DisplayClass14_0).
+                    object singleton = GetDisplayClassSingleton(nt);
+                    object target = singleton ?? CreateInstance(nt);
                     if (target == null)
                     {
                         Plugin.Log.LogError($"[YesImSure] Found {nt.Name}.{lambdaName} for '{label}' but could not obtain an instance to invoke it on");
                         return false;
                     }
+
+                    // For instance-capturing display classes (no static singleton): set the outer
+                    // 'this' (the panel instance) at offset 0x10 — the first field after the Il2Cpp
+                    // object header, which is where the compiler always places <>4__this.
+                    // Il2CppInterop reflection cannot find this field by name or type; a native write
+                    // is the only reliable approach.
+                    if (singleton == null && instance != null)
+                    {
+                        try
+                        {
+                            var tBase = target as Il2CppObjectBase;
+                            var iBase = instance as Il2CppObjectBase;
+                            if (tBase != null && iBase != null)
+                            {
+                                IntPtr tPtr = IL2CPP.Il2CppObjectBaseToPtr(tBase);
+                                IntPtr iPtr = IL2CPP.Il2CppObjectBaseToPtr(iBase);
+                                if (tPtr != IntPtr.Zero && iPtr != IntPtr.Zero)
+                                    Marshal.WriteIntPtr(IntPtr.Add(tPtr, 0x10), iPtr);
+                            }
+                        }
+                        catch { }
+                    }
+
                     nm.Invoke(target, null);
                     return true;
                 }
