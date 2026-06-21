@@ -32,6 +32,31 @@
       --code-text:      #C8A060;
     }
 
+    html.dark {
+      --parchment:      #1A0C06;
+      --parchment-mid:  #231208;
+      --parchment-deep: #2E1A0C;
+      --walnut:         #DFC8A0;
+      --leather:        #C89060;
+      --code-bg:        #100804;
+    }
+    html.dark h2               { color: var(--brass-light); }
+    html.dark h3               { color: var(--brass); }
+    html.dark .patch-name      { color: var(--brass-light); }
+    html.dark .dossier-title   { color: var(--brass-light); }
+    html.dark a                { color: var(--brass-light); }
+    html.dark a:hover          { color: #E0C080; }
+    html.dark code             { background: #2A1608; color: var(--brass-light); }
+    html.dark .license-toggle  { color: var(--walnut); }
+    html.dark .license-toggle:hover { color: var(--brass-light); }
+    html.dark .issues-list li strong { color: var(--brass-light); }
+    html.dark .patch-status.on  { color: #6DB878; border-color: #6DB878; }
+    html.dark .patch-status.off { color: #D96B6B; border-color: #D96B6B; }
+    html.dark .compat-val.good  { color: #6DB878; }
+    html.dark .compat-val.bad   { color: #D96B6B; }
+    html.dark .callout.warn .callout-label { color: #D96B6B; }
+    html.dark .callout.note .callout-label { color: #6DB878; }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html { scroll-behavior: smooth; }
@@ -100,6 +125,7 @@
       text-transform: uppercase;
       color: rgba(240,230,206,0.65);
       margin-bottom: 10px;
+      text-shadow: 0 1px 8px rgba(20,8,4,0.9);
     }
     .banner-title {
       font-family: 'Playfair Display', serif;
@@ -110,12 +136,21 @@
       line-height: 1.05;
       letter-spacing: 0.025em;
     }
+    .banner-logo {
+      max-width: 640px;
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      filter: drop-shadow(0 2px 18px rgba(30,10,4,0.7));
+    }
     .banner-subtitle {
       font-family: 'Libre Baskerville', serif;
       font-style: italic;
       font-size: 16px;
       color: rgba(240,230,206,0.75);
       margin-top: 9px;
+      text-shadow: 0 1px 8px rgba(20,8,4,0.9);
     }
     .banner-version {
       display: inline-block;
@@ -127,6 +162,7 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--brass-light);
+      text-shadow: 0 1px 8px rgba(20,8,4,0.9);
     }
 
     /* ── NAVIGATION ─────────────────────────────────────────────── */
@@ -140,7 +176,7 @@
     .nav-inner {
       max-width: 940px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 100px 0 20px;
       display: flex;
       align-items: stretch;
       overflow-x: auto;
@@ -536,6 +572,29 @@
       opacity: 0.45;
     }
 
+    /* ── DARK TOGGLE ─────────────────────────────────────────────── */
+    .dark-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: 1px solid rgba(156,120,64,0.4);
+      color: rgba(240,230,206,0.62);
+      font-family: 'Cascadia Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.18s, border-color 0.18s;
+    }
+    .dark-toggle:hover { color: var(--brass-light); border-color: rgba(196,160,96,0.7); }
+
     /* ── FOOTER ──────────────────────────────────────────────────── */
     footer {
       background: var(--mahogany);
@@ -568,7 +627,7 @@
   </div>
   <div class="banner-content">
     <div class="banner-eyebrow">Quality-of-Life Mod for Suzerain</div>
-    <h1 class="banner-title">Suzerain Unbound</h1>
+    <img src="logo.png" alt="Suzerain Unbound" class="banner-logo">
     <div class="banner-subtitle">The Suzerain experience, refined.</div>
     <div class="banner-version">Release v1.5.0</div>
   </div>
@@ -586,6 +645,7 @@
     <a href="#issues">Known Issues</a>
     <a href="#compatibility">Compatibility</a>
     <a href="#disclaimer">Disclaimer</a>
+    <button class="dark-toggle" id="dark-toggle" onclick="toggleDark()" aria-label="Toggle dark mode"><span id="dark-toggle-icon">☾</span> Night</button>
   </div>
 </nav>
 
@@ -975,6 +1035,30 @@ THE SOFTWARE.</pre>
     header.setAttribute('aria-expanded', String(!isOpen));
     body.setAttribute('aria-hidden', String(isOpen));
   }
+
+  function toggleDark() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    updateDarkToggle(isDark);
+  }
+
+  function updateDarkToggle(isDark) {
+    const icon = document.getElementById('dark-toggle-icon');
+    const btn  = document.getElementById('dark-toggle');
+    if (icon) { icon.textContent = isDark ? '☀' : '☾'; }
+    if (btn) {
+      btn.childNodes.forEach(n => { if (n.nodeType === 3) { n.textContent = isDark ? ' Day' : ' Night'; } });
+    }
+  }
+
+  (function () {
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (saved === 'dark' || (!saved && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      updateDarkToggle(true);
+    }
+  })();
 
   // Keyboard support for dossier headers
   document.querySelectorAll('.dossier-header').forEach(header => {

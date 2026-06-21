@@ -28,9 +28,14 @@ public class DialogueSkipper : MonoBehaviour
                     // block OnContinueConversation() at the PixelCrushers level. Guard manually:
                     // don't advance dialogue while a game panel is overriding the conversation.
                     if (_decreePanel == null)
+                    {
                         _decreePanel = FindObjectOfType<OneTimeDecreesPanel>();
+                    }
+
                     if (_decreePanel != null && _decreePanel.IsShowing())
+                    {
                         return;
+                    }
 
                     DialogueManager.standardDialogueUI.OnContinueConversation();
                     _nextAdvanceTime = Time.time + 0.15f;

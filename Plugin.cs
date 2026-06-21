@@ -224,7 +224,7 @@ public class Plugin : BasePlugin
             }
             catch
             {
-                Log.LogWarning("[CONFIG] Colorblind Mode patch failed to apply.");
+                Log.LogWarning("[CONFIG] Colorblind Mode patches failed to apply.");
             }
         }
 
