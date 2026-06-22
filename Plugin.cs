@@ -33,6 +33,9 @@ public class Plugin : BasePlugin
     public static ConfigEntry<bool> EnableRichPresence;
     public static ConfigEntry<bool> ShowStrangeRanks;
     public static ConfigEntry<ColorblindPalette> ColorblindMode;
+    public static ConfigEntry<TextHookMode> EnableTextHook;
+    public static ConfigEntry<string> LunaTranslatorUrl;
+    public static ConfigEntry<bool> TextHookIncludePlayerLines;
 
     public override void Load()
     {
@@ -46,7 +49,7 @@ public class Plugin : BasePlugin
         Log.LogInfo("  A Morgna wes core! Vectern sis da!");
         Log.LogInfo("==========================================================================");
         Log.LogInfo("  [REQUIREMENT] Requires BepInEx 6.0 (IL2CPP) Bleeding Edge!");
-        Log.LogInfo("  [INFO] Developed on BepInExbuild: 6.0.0-be.764");
+        Log.LogInfo("  [INFO] Developed on BepInEx build: 6.0.0-be.783");
         Log.LogInfo("  [INFO] Tested on Suzerain version: 3.1.0 (Windows) Build: 175");
         Log.LogInfo("==========================================================================");
 
@@ -69,6 +72,9 @@ public class Plugin : BasePlugin
 
         // Accessibility patches
         ColorblindMode = Config.Bind("Accessibility", "ColorblindMode", ColorblindPalette.vanilla, "Colorblind-friendly color palette for Overview panel/Economy situation severity (Low/Medium/High).\nvanilla: Game default (green/yellow/red).\nblueOrange: Blue/amber/orange stoplight.\nokabeIto: Okabe-Ito universal design palette.\nibm: IBM colorblind-safe palette.\ntritanopia: Optimized for tritanopia (blue-yellow colorblindness).\ngraves: A fun pastel palette. Decorative, not intended for actual colorblind use.");
+        EnableTextHook = Config.Bind("Accessibility", "TextHook", TextHookMode.disabled, "Live text hook for external translation/text-to-speech tools.\ndisabled: Off.\nlunaTranslator: POST each dialogue line to LunaTranslator's /api/textinput.\nclipboard: Copy each line to the system clipboard.\nboth: Do both simultaneously.");
+        LunaTranslatorUrl = Config.Bind("Translation", "LunaTranslatorUrl", "http://localhost:2333", "(TextHook) Base URL of the LunaTranslator network service. Check LunaTranslator Settings -> Network Service for the port.");
+        TextHookIncludePlayerLines = Config.Bind("Translation", "IncludePlayerLines", true, "(TextHook) Whether to send player's chosen dialogue lines. Disable for NPC-only output.");
 
         // Cheats are off by default
         EnableTorporUnlock = Config.Bind("Cheats", "TorporModeUnlock", false, "Allows disabling Torpor Mode on fresh saves.");
@@ -212,6 +218,20 @@ public class Plugin : BasePlugin
             catch
             {
                 Log.LogWarning("[CONFIG] Read All Reports failed to inject.");
+            }
+        }
+
+        if (EnableTextHook.Value != TextHookMode.disabled)
+        {
+            try
+            {
+                harmony.PatchAll(typeof(TextHookPatch));
+                harmony.PatchAll(typeof(TextHookAutoAdvancePatch));
+                Log.LogInfo($"[CONFIG] Text Hook patches applied. Mode: {EnableTextHook.Value}");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Text Hook patches failed to apply.");
             }
         }
 

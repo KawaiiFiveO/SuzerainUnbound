@@ -10,17 +10,17 @@ Quality of Life patches for vanilla Suzerain. Remove limitations placed by the d
 
 Each patch can be enabled or disabled in the configuration file.
 
-**Skip Splash**: Skips the Torpor Games intro logos. Enabled by default.
+**Skip Splash**: Skips the Torpor Games intro logos.
 
-**Fast Dialogue**: Instantly shows text on screen (similar to `Typewriter` OFF) and enables **Dialogue Skip**, which allows you to hold a key down (default: `LeftCtrl`) to rapidly advance the dialogue. You can even skip unread text (which is not allowed by the `Skip Read Dialogue Text` menu option in vanilla). Enabled by default.
+**Fast Dialogue**: Instantly shows text on screen (similar to `Typewriter` OFF) and enables **Dialogue Skip**, which allows you to hold a key down (default: `LeftCtrl`) to rapidly advance the dialogue. You can even skip unread text (which is not allowed by the `Skip Read Dialogue Text` menu option in vanilla).
 
-**Run In Background**: Prevents the game from pausing or throttling framerate when Alt-Tabbed, which improves stability. Game audio can also be muted when tabbing out. Enabled by default (muted).
+**Run In Background**: Prevents the game from pausing or throttling framerate when Alt-Tabbed, which improves stability. Game audio can also be muted when tabbing out.
 
-**Yes I'm Sure**: Automatically skip all in-game/setup "Are you sure about your decisions?" prompts. Optionally, skip all system prompts as well. Enabled by default (in-game only).
+**Yes I'm Sure**: Automatically skip all in-game/setup "Are you sure about your decisions?" prompts. Optionally, skip all system prompts as well.
 
-**Dota Camera Rebind**: Allow map dragging with the Middle-Mouse Button. (Does not affect Right-Mouse.) Enabled by default.
+**Dota Camera Rebind**: Allow map dragging with the Middle-Mouse Button. (Does not affect Right-Mouse.)
 
-**Fix Camera Edge Pan**: Prevents endless panning when the mouse is on a second monitor. Optionally, disable edge panning entirely. Enabled by default (edge fix).
+**Fix Camera Edge Pan**: Prevents endless panning when the mouse is on a second monitor. Optionally, disable edge panning entirely.
 
 **Discord RPC**: Enables Discord Rich Presence for Suzerain, which displays info similar to Steam Rich Presence.
 
@@ -28,9 +28,13 @@ Each patch can be enabled or disabled in the configuration file.
 
 **Colorblind Friendly:** Set a colorblind-friendly palette for certain indicators that were green/yellow/red by default.
 
+**Text Hook:** Live text hook for external translation and text-to-speech tools. Compatible with LunaTranslator and any clipboard-monitoring tool.
+
 **Torpor Mode Unlock**: Suzerain forces Torpor Mode ON when playing on a fresh profile. This allows it to be set to OFF so that you can save your game.
 
 **Force Achievements**: Forces Steam achievements to unlock even if Torpor Mode is off.
+
+Accessibility patches are disabled by default. Enable them in the configuration file if needed.
 
 Torpor Mode Unlock and Force Achievements are disabled by default because they are cheats that can alter your user profile or save files.
 
@@ -58,7 +62,7 @@ If there is a game update, Suzerain Unbound will stop working, and the `BepInEx/
 
 If you already have BepInEx 6.0 installed and want to use Suzerain Unbound alongside other mods, you can download the "Plugin Only" release and install it by dropping `SuzerainUnbound.dll` directly into your existing `Suzerain/BepInEx/plugins` folder.
 
-**NOTE**: This plugin requires **BepInEx 6.0 (IL2CPP) Bleeding Edge** (tested on build #764). It will **NOT** work on BepInEx 5.x. If you do not know what this means, please download the **"With Modloader"** bundle, which includes everything pre-configured!
+**NOTE**: This plugin requires **BepInEx 6.0 (IL2CPP) Bleeding Edge** (tested on build #783). It will **NOT** work on BepInEx 5.x. If you do not know what this means, please download the **"With Modloader"** bundle, which includes everything pre-configured!
 
 ### Uninstall
 
@@ -84,7 +88,7 @@ If you want to contribute to Suzerain Unbound or build it from source, you will 
 
 ### Prerequisites
 1. You must have **Suzerain** installed.
-2. You must have **BepInEx 6.0 (IL2CPP)** installed in your game directory. (tested on build #764)
+2. You must have **BepInEx 6.0 (IL2CPP)** installed in your game directory. (tested on build #783)
 3. You must have launched the game at least once with BepInEx active to generate the `BepInEx/interop` assemblies.
 
 * Note: Standard BepInEx 5.x **will not work** as it does not support IL2CPP games.
@@ -113,7 +117,7 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.5.0
+Latest release of Suzerain Unbound: v1.6.0
 
 Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
 

@@ -28,6 +28,7 @@
       --brass-light:    #C4A060;
       --red-seal:       #8B2424;
       --green-seal:     #2A5C38;
+      --access:         #5E7C8A;
       --code-bg:        #1C0E08;
       --code-text:      #C8A060;
     }
@@ -38,6 +39,7 @@
       --parchment-deep: #2E1A0C;
       --walnut:         #DFC8A0;
       --leather:        #C89060;
+      --access:         #8AB5C8;
       --code-bg:        #100804;
     }
     html.dark h2               { color: var(--brass-light); }
@@ -273,8 +275,8 @@
       border-left: 3px solid var(--brass);
       padding: 16px 18px 18px;
     }
-    .patch-card.cheat { border-left-color: var(--red-seal); }
-    .patch-card.extra { border-left-color: var(--walnut); }
+    .patch-card.cheat  { border-left-color: var(--red-seal); }
+    .patch-card.access { border-left-color: var(--access); }
     .patch-name {
       font-family: 'Playfair Display', serif;
       font-weight: 700;
@@ -297,9 +299,10 @@
       text-transform: uppercase;
       font-weight: 700;
     }
-    .patch-status.on  { color: var(--green-seal); border-color: var(--green-seal); }
-    .patch-status.off { color: var(--red-seal);   border-color: var(--red-seal);   }
-    .patch-status.extra { color: var(--walnut);   border-color: var(--walnut);   }
+    .patch-status.on     { color: var(--green-seal); border-color: var(--green-seal); }
+    .patch-status.off    { color: var(--red-seal);   border-color: var(--red-seal);   }
+    .patch-status.access { color: var(--access);     border-color: var(--access);     }
+    .patch-status.extra  { color: var(--leather);    border-color: var(--leather);    }
 
     /* ── STEPS ───────────────────────────────────────────────────── */
     .steps { counter-reset: step; list-style: none; }
@@ -629,7 +632,7 @@
     <div class="banner-eyebrow">Quality-of-Life Mod for Suzerain</div>
     <img src="logo.png" alt="Suzerain Unbound" class="banner-logo">
     <div class="banner-subtitle">The Suzerain experience, refined.</div>
-    <div class="banner-version">Release v1.5.0</div>
+    <div class="banner-version">Release v1.6.0</div>
   </div>
 </header>
 
@@ -658,67 +661,85 @@
       <span class="section-sigil">§</span>
       <h2>Included Patches</h2>
     </div>
-    <p>Each patch can be individually enabled or disabled in the configuration file. Cheat patches are disabled by default.</p>
+    <p>Each patch can be individually enabled or disabled in the configuration file.</p>
+    <div class="callout note" style="margin-top: 20px;">
+      <div class="callout-label">Improvements</div>
+      <p>The following patches are enabled by default.</p>
+    </div>
     <div class="patch-grid">
 
       <div class="patch-card">
         <div class="patch-name">Skip Splash</div>
         <p class="patch-desc">Skips the Torpor Games intro logos on every launch.</p>
-        <span class="patch-status on">Enabled by default</span>
+        <span class="patch-status on">Quality of Life</span>
       </div>
 
       <div class="patch-card">
         <div class="patch-name">Fast Dialogue</div>
-        <p class="patch-desc">Instantly displays all text and enables Dialogue Skip — hold a key (default: <code>LeftCtrl</code>) to rapidly advance dialogue, including unread lines that vanilla does not allow skipping.</p>
-        <span class="patch-status on">Enabled by default</span>
+        <p class="patch-desc">Instantly displays all text and enables Dialogue Skip — hold a key (default: <code>LeftCtrl</code>) to rapidly advance dialogue, including unread lines.</p>
+        <span class="patch-status on">Quality of Life</span>
       </div>
 
       <div class="patch-card">
         <div class="patch-name">Run In Background</div>
         <p class="patch-desc">Prevents the game from pausing or throttling its framerate when Alt-Tabbed, improving stability. Audio can also be muted automatically on tab-out.</p>
-        <span class="patch-status on">Enabled by default (muted)</span>
+        <span class="patch-status on">Quality of Life</span>
       </div>
 
       <div class="patch-card">
         <div class="patch-name">Yes I'm Sure</div>
         <p class="patch-desc">Automatically skip all in-game/setup "Are you sure about your decisions?" prompts. Optionally, also skip all system prompts (apply/quit/main-menu/load-checkpoint).</p>
-        <span class="patch-status on">Enabled by default (skip in-game)</span>
+        <span class="patch-status on">Quality of Life</span>
       </div>
 
       <div class="patch-card">
         <div class="patch-name">Dota Camera Rebind</div>
         <p class="patch-desc">Allow map dragging with the Middle-Mouse Button. (Does not affect Right-Mouse.)</p>
-        <span class="patch-status on">Enabled by default</span>
+        <span class="patch-status on">Controls</span>
       </div>
 
       <div class="patch-card">
         <div class="patch-name">Fix Camera Edge Pan</div>
         <p class="patch-desc">Prevents endless panning when the mouse is outside of the game window. Optionally, disable edge panning entirely.</p>
-        <span class="patch-status on">Enabled by default (edge fix)</span>
+        <span class="patch-status on">Controls</span>
       </div>
       
       <div class="patch-card">
         <div class="patch-name">Discord RPC</div>
         <p class="patch-desc">Enables Discord Rich Presence for Suzerain, which displays info similar to Steam Rich Presence.</p>
-        <span class="patch-status on">Enabled by default</span>
+        <span class="patch-status on">New Features</span>
       </div>
       
       <div class="patch-card">
         <div class="patch-name">Read All Reports</div>
         <p class="patch-desc">Press a key (default: <code>F1</code>/<code>F2</code>) to instantly mark all pending map reports or news articles as read.</p>
-        <span class="patch-status on">Enabled by default</span>
+        <span class="patch-status on">Quality of Life</span>
       </div>
 
-      <div class="patch-card extra">
-        <div class="patch-name">Colorblind Friendly</div>
-        <p class="patch-desc">Set a colorblind-friendly palette for certain indicators that were green/yellow/red by default.</p>
-        <span class="patch-status extra">Accessibility</span>
-      </div>
-
-      <div class="patch-card extra">
+      <div class="patch-card">
         <div class="patch-name">Strange Counters</div>
         <p class="patch-desc">You can track your player stats!</p>
         <span class="patch-status extra">Extras</span>
+      </div>
+
+    </div>
+
+    <div class="callout note" style="margin-top: 20px;">
+      <div class="callout-label">Accessibility</div>
+      <p>The following patches are disabled by default. Enable them in the configuration file if needed.</p>
+    </div>
+    <div class="patch-grid">
+
+      <div class="patch-card access">
+        <div class="patch-name">Colorblind Friendly</div>
+        <p class="patch-desc">Set a colorblind-friendly palette for certain indicators that were green/yellow/red by default.</p>
+        <span class="patch-status access">Accessibility</span>
+      </div>
+
+      <div class="patch-card access">
+        <div class="patch-name">Text Hook</div>
+        <p class="patch-desc">Live text hook for external translation and text-to-speech tools. Compatible with LunaTranslator and any clipboard-monitoring tool.</p>
+        <span class="patch-status access">Accessibility</span>
       </div>
 
     </div>
@@ -730,14 +751,14 @@
     <div class="patch-grid">
       <div class="patch-card cheat">
         <div class="patch-name">Torpor Mode Unlock</div>
-        <p class="patch-desc">Suzerain forces Torpor Mode ON for new profiles, blocking manual saves. This patch allows it to be turned OFF so you can save your game normally.</p>
-        <span class="patch-status off">Disabled by default</span>
+        <p class="patch-desc">Suzerain forces Torpor Mode ON before a campaign has been completed, blocking manual saves. This patch allows it to be turned OFF so you can save your game.</p>
+        <span class="patch-status off">Cheats</span>
       </div>
 
       <div class="patch-card cheat">
         <div class="patch-name">Force Achievements</div>
         <p class="patch-desc">Allows Steam achievements to be obtained regardless of whether Torpor Mode is active.</p>
-        <span class="patch-status off">Disabled by default</span>
+        <span class="patch-status off">Cheats</span>
       </div>      
     </div>
   </section>
@@ -830,7 +851,7 @@ Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
         <p>If the game itself was updated, delete the <code>BepInEx/interop</code> folder before launching the game again.</p>
         <div class="callout warn">
           <div class="callout-label">⚠ Version Requirement</div>
-          <p>This plugin requires <strong>BepInEx 6.0 (IL2CPP) Bleeding Edge</strong>, tested on build #764. It will <strong>not</strong> work on BepInEx 5.x. If you do not have existing mods and do not want to install BepInEx manually, use the "With Modloader" bundle instead — it includes everything pre-configured.</p>
+          <p>This plugin requires <strong>BepInEx 6.0 (IL2CPP) Bleeding Edge</strong>, tested on build #783. It will <strong>not</strong> work on BepInEx 5.x. If you do not have existing mods and do not want to install BepInEx manually, use the "With Modloader" bundle instead — it includes everything pre-configured.</p>
         </div>
         <p>The correct BepInEx builds are available from the official build server. Make sure to download the <strong>Unity IL2CPP</strong> build for your operating system (e.g. <code>BepInEx-Unity.IL2CPP-win-x64</code>).</p>
         <a class="btn-link" href="https://builds.bepinex.dev/projects/bepinex_be" target="_blank">BepInEx Bleeding Edge Builds →</a>
@@ -857,7 +878,7 @@ Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
         <h3>Prerequisites</h3>
         <ul style="padding-left: 22px; line-height: 2.1; margin-bottom: 4px;">
           <li><strong>Suzerain</strong> must be installed.</li>
-          <li><strong>BepInEx 6.0 (IL2CPP) Bleeding Edge</strong> must be installed in the game directory (tested on build #764). Standard BepInEx 5.x will not work.</li>
+          <li><strong>BepInEx 6.0 (IL2CPP) Bleeding Edge</strong> must be installed in the game directory (tested on build #783). Standard BepInEx 5.x will not work.</li>
           <li>Launch the game <strong>at least once</strong> with BepInEx active to generate the <code>BepInEx/interop</code> assemblies. If a game update occurs, delete this folder to regenerate them, then re-link in the project.</li>
         </ul>
         <a class="btn-link" href="https://builds.bepinex.dev/projects/bepinex_be" target="_blank">BepInEx Bleeding Edge Builds →</a>
@@ -904,6 +925,10 @@ Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
         <strong>General Crashes</strong>
         Suzerain and BepInEx (Bleeding Edge) are known to be unstable; some patches may compound this. Crashes are rare, but if you find a way to reproduce one consistently, please submit an issue report with logs!
       </li>
+      <li>
+        <strong>Downloading Unity Base Libraries</strong>
+        On the first launch of a new installation, BepInEx must download the Unity base libraries before it can launch. This download may fail if you are using a VPN, so disable your VPN if BepInEx is unable to download the libraries.
+      </li>
     <div class="callout warn" style="margin-top: 18px;">
       <div class="callout-label">⚠ Report Issues</div>
       <p>Experiencing an issue that isn't listed here? Submit an issue report if a patch is broken and you are using the correct version of Suzerain Unbound for your game (see <a href="#compatibility">Compatibility</a>). Include log files from the <code>Suzerain/BepInEx</code> folder in your report, along with any relevant save files.</p>
@@ -921,11 +946,11 @@ Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
     <div class="compat-block">
       <div class="compat-row">
         <span class="compat-key">Suzerain Unbound version</span>
-        <span class="compat-val">v1.5.0</span>
+        <span class="compat-val">v1.6.0</span>
       </div>
       <div class="compat-row">
         <span class="compat-key">BepInEx required</span>
-        <span class="compat-val">6.0 IL2CPP Bleeding Edge (build #764)</span>
+        <span class="compat-val">6.0 IL2CPP Bleeding Edge (build #783)</span>
       </div>
       <div class="compat-row">
         <span class="compat-key">Tested with Suzerain</span>
