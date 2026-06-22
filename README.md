@@ -113,7 +113,9 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 **Fix Camera Edge Pan:** The fix that prevents endless panning when the mouse is moved off the screen (default: `stopAtEdge`) only works on Windows. Other platforms must use the `vanilla` or `disabled` modes. 
 
-**General Crashes**: Vanilla Suzerain/BepInEx (Bleeding Edge) is already known to be unstable, so adding mods to it probably doesn't help.
+**General Crashes:** Vanilla Suzerain/BepInEx (Bleeding Edge) is already known to be unstable, so adding mods to it probably doesn't help.
+
+**Downloading Unity Base Libraries:** On the first launch of a new installation, BepInEx must download the Unity base libraries before it can launch. This download may fail if you are using a VPN, so disable your VPN if BepInEx is unable to download the libraries. 
 
 ### Compatibility
 
