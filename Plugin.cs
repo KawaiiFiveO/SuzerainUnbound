@@ -41,17 +41,17 @@ public class Plugin : BasePlugin
     {
         Log = base.Log;
 
-        Log.LogInfo("==========================================================================");
-        Log.LogInfo($"  Suzerain Unbound v{MyPluginInfo.PLUGIN_VERSION} loaded!");
-        Log.LogInfo("  Created by: OneHalf");
-        Log.LogInfo("  Website: https://onehalf.dev/SuzerainUnbound");
-        Log.LogInfo("  Report Issues: https://github.com/KawaiiFiveO/SuzerainUnbound/issues");
-        Log.LogInfo("  A Morgna wes core! Vectern sis da!");
-        Log.LogInfo("==========================================================================");
-        Log.LogInfo("  [REQUIREMENT] Requires BepInEx 6.0 (IL2CPP) Bleeding Edge!");
-        Log.LogInfo("  [INFO] Developed on BepInEx build: 6.0.0-be.783");
-        Log.LogInfo("  [INFO] Tested on Suzerain version: 3.1.0 (Windows) Build: 175");
-        Log.LogInfo("==========================================================================");
+        Log.LogMessage("==========================================================================");
+        Log.LogMessage($"  Suzerain Unbound v{MyPluginInfo.PLUGIN_VERSION} loaded!");
+        Log.LogMessage("  Created by: OneHalf");
+        Log.LogMessage("  Website: https://onehalf.dev/SuzerainUnbound");
+        Log.LogMessage("  Report Issues: https://github.com/KawaiiFiveO/SuzerainUnbound/issues");
+        Log.LogMessage("  A Morgna wes core! Vectern sis da!");
+        Log.LogMessage("==========================================================================");
+        Log.LogMessage("  [REQUIREMENT] Requires BepInEx 6.0 (IL2CPP) Bleeding Edge!");
+        Log.LogMessage("  [INFO] Developed on BepInEx build: 6.0.0-be.783");
+        Log.LogMessage("  [INFO] Tested on Suzerain version: 3.1.0 (Windows) Build: 175");
+        Log.LogMessage("==========================================================================");
 
         // 2. Bind the configs. (Category, Name, Default Value, Description)
         // This generates a text file in BepInEx/config/com.onehalf.suzerainunbound.cfg
