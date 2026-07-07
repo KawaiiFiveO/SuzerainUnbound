@@ -1,27 +1,26 @@
 ﻿using HarmonyLib;
 using Steamworks.Data;
 using PixelCrushers.DialogueSystem.SequencerCommands;
+using System;
 
 namespace SuzerainUnbound;
 
 [HarmonyPatch(typeof(SequencerCommandUnlockSteamAchievement), nameof(SequencerCommandUnlockSteamAchievement.Start))]
 public class ForceDialogueAchievementPatch
 {
-    // We use __instance to get the running sequencer command
     static void Prefix(SequencerCommandUnlockSteamAchievement __instance)
     {
-        // Traverse looks inside the object, ignores 'protected' limits, climbs up to the base class, 
-        // finds the GetParameter method, passes 0 and an empty string, and gives us the result!
+        // SequencerCommand.parameters is protected, so we read it via Traverse.
+        // Accessing the property directly is more robust than invoking GetParameter by name.
         string achievementID = string.Empty;
         try
         {
-            achievementID = Traverse.Create(__instance)
-            .Method("GetParameter", new object[] { 0, string.Empty })
-            .GetValue<string>();
+            string[] parameters = Traverse.Create(__instance).Property("parameters").GetValue<string[]>();
+            achievementID = (parameters != null && parameters.Length > 0) ? parameters[0] : string.Empty;
         }
-        catch
+        catch (Exception ex)
         {
-            Plugin.Log.LogWarning("[ForceAchievements] Failed to get achievement ID!");
+            Plugin.Log.LogWarning($"[ForceAchievements] Failed to get achievement ID: {ex.Message}");
         }
 
         if (!string.IsNullOrEmpty(achievementID))
@@ -32,14 +31,14 @@ public class ForceDialogueAchievementPatch
             {
                 new Achievement(achievementID).Trigger();
             }
-            catch
+            catch (Exception ex)
             {
-                Plugin.Log.LogWarning($"[ForceAchievements] Failed to unlock achievement: {achievementID}");
+                Plugin.Log.LogWarning($"[ForceAchievements] Failed to unlock achievement '{achievementID}': {ex.Message}");
             }
         }
         else
         {
-            Plugin.Log.LogWarning("[ForceAchievements] Achievement ID was not found by Traverse!");
+            Plugin.Log.LogWarning("[ForceAchievements] Achievement ID was not found!");
         }
     }
 }

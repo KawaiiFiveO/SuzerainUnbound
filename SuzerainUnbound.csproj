@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>SuzerainUnbound</AssemblyName>
     <Product>Suzerain Unbound</Product>
-    <Version>1.6.0</Version>
+    <Version>1.7.0</Version>
 	<BepInExPluginGuid>com.onehalf.suzerainunbound</BepInExPluginGuid>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>

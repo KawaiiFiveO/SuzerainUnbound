@@ -4,7 +4,7 @@ using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
-using System.Runtime.InteropServices;
+using System;
 using UnityEngine;
 
 namespace SuzerainUnbound;
@@ -27,6 +27,8 @@ public class Plugin : BasePlugin
     public static ConfigEntry<ConfirmSkipMode> EnableConfirmSkip;
     public static ConfigEntry<MapPanMode> EdgePanMode;
     public static ConfigEntry<bool> EnableDotaCamera;
+    public static ConfigEntry<bool> EnableZoomOut;
+    public static ConfigEntry<float> ZoomOutMultiplier;
     public static ConfigEntry<int> SkippedPopupsCount;
     public static ConfigEntry<int> SkippedDialogueCount;
     public static ConfigEntry<int> ReportsReadCount;
@@ -68,6 +70,8 @@ public class Plugin : BasePlugin
         EnableConfirmSkip = Config.Bind("Features", "YesImSure", ConfirmSkipMode.skipIngame, "Yes I'm Sure modes\ndisabled: Never skip prompts.\nskipIngame: Automatically skip all in-game/setup 'Are you sure about your decisions?' prompts.\nskipAll: Also auto-skip all apply/quit/main-menu/load-checkpoint confirmations.");
         EdgePanMode = Config.Bind("Controls", "FixCameraEdgePan", MapPanMode.stopAtEdge, "Fix Camera Edge Pan modes\nvanilla: Default camera behavior.\nstopAtEdge: Prevents endless panning when the mouse is on a second monitor.\ndisabled: Turns off edge panning completely (use Right-Mouse or Middle-Mouse instead).");
         EnableDotaCamera = Config.Bind("Controls", "DotaCameraRebind", true, "Allow map dragging with Middle-Mouse Button. (Does not affect Right-Mouse.)");
+        EnableZoomOut = Config.Bind("Controls", "WideAngleLens", true, "Allow the camera to zoom out further than the vanilla limit.");
+        ZoomOutMultiplier = Config.Bind("Controls", "ZoomOutMultiplier", 1.5f, "(WideAngleLens) Multiplies the maximum camera zoom-out distance. 1.0 = vanilla.");
         EnableRichPresence = Config.Bind("Features", "DiscordRPC", true, "Enable Discord Rich Presence for Suzerain.");
 
         // Accessibility patches
@@ -159,17 +163,8 @@ public class Plugin : BasePlugin
         {
             try
             {
-                bool isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-
-                if (!isWindows && EdgePanMode.Value == MapPanMode.stopAtEdge)
-                {
-                    Log.LogWarning("[CONFIG] Fix Camera Edge Pan (stopAtEdge mode) is only available on Windows. Skipping patch.");
-                }
-                else
-                {
-                    harmony.PatchAll(typeof(CameraEdgePanPatch));
-                    Log.LogInfo($"[CONFIG] Fix Camera Edge Pan patch applied. Mode: {EdgePanMode.Value}");
-                }
+                harmony.PatchAll(typeof(CameraEdgePanPatch));
+                Log.LogInfo($"[CONFIG] Fix Camera Edge Pan patch applied. Mode: {EdgePanMode.Value}");
             }
             catch
             {
@@ -191,17 +186,34 @@ public class Plugin : BasePlugin
             }
         }
 
+        if (EnableZoomOut.Value)
+        {
+            try
+            {
+                harmony.PatchAll(typeof(CameraZoomOutPatch));
+                Log.LogInfo($"[CONFIG] Wide Angle Lens patch applied. Multiplier: {ZoomOutMultiplier.Value}");
+            }
+            catch
+            {
+                Log.LogWarning("[CONFIG] Wide Angle Lens patch failed to apply.");
+            }
+        }
+
         if (EnableRichPresence.Value)
         {
             try
             {
-                harmony.PatchAll(typeof(RichPresencePatches));
+                // Initialize first: if the DiscordRPC assembly can't be loaded (e.g. missing
+                // from BepInEx/plugins), fail here before the game-side hooks go live, so we
+                // don't end up with a patched SetRichPresence calling into an uninitialized Log.
                 DiscordRichPresence.Initialize(Log);
+                harmony.PatchAll(typeof(RichPresencePatches));
                 Log.LogInfo("[CONFIG] Discord Rich Presence patches applied.");
             }
-            catch
+            catch (Exception ex)
             {
-                Log.LogWarning("[CONFIG] Discord Rich Presence patches failed to apply.");
+                Log.LogWarning($"[CONFIG] Discord Rich Presence patches failed to apply: {ex.Message}");
+                Log.LogWarning("[CONFIG] If this mentions a missing 'DiscordRPC' assembly, make sure DiscordRPC.dll (and its dependencies) are present in BepInEx/plugins.");
             }
         }
 

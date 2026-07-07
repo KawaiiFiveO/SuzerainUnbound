@@ -19,5 +19,7 @@ ReleaseAssets/BepInEx*.zip
 # Ignore the local config file
 ReleaseAssets/*.cfg
 
-# Ignore the Claude config file
+# Ignore the Claude config files
 CLAUDE.md
+.mcp.json
+.claude/

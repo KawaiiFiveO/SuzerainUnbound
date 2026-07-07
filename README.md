@@ -24,7 +24,9 @@ Each patch can be enabled or disabled in the configuration file.
 
 **Discord RPC**: Enables Discord Rich Presence for Suzerain, which displays info similar to Steam Rich Presence.
 
-**Read All Reports:** Press a key to instantly mark all pending map reports or news articles as read (default: `F1`/`F2`).
+**Read All Reports**: Press a key to instantly mark all pending map reports or news articles as read (default: `F1`/`F2`).
+
+**Wide Angle Lens**: Allow the camera to zoom out further than the vanilla limit.
 
 **Colorblind Friendly:** Set a colorblind-friendly palette for certain indicators that were green/yellow/red by default.
 
@@ -111,7 +113,7 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Known Issues
 
-**Fix Camera Edge Pan:** The fix that prevents endless panning when the mouse is moved off the screen (default: `stopAtEdge`) only works on Windows. Other platforms must use the `vanilla` or `disabled` modes. 
+**Fix Camera Edge Pan:** The `stopAtEdge` mode has only been confirmed to work on Windows. Mac users may still benefit from it for focus-loss cases (Alt-Tab, window switching), but behavior with multi-monitor hover has not been tested.
 
 **General Crashes:** Vanilla Suzerain/BepInEx (Bleeding Edge) is already known to be unstable, so adding mods to it probably doesn't help.
 
@@ -119,7 +121,7 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.6.0
+Latest release of Suzerain Unbound: v1.7.0
 
 Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
 

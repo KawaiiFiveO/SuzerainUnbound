@@ -29,10 +29,6 @@ public class CameraEdgePanPatch
     [DllImport("user32.dll")]
     private static extern IntPtr GetActiveWindow();
 
-    // Asks Windows what application the user is currently using
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetForegroundWindow();
-
     [StructLayout(LayoutKind.Sequential)]
     public struct POINT
     {
@@ -62,22 +58,19 @@ public class CameraEdgePanPatch
         {
             bool isOutOfBounds = false;
 
-            IntPtr gameWindow = GetActiveWindow();
-            IntPtr foregroundWindow = GetForegroundWindow();
-
-            // 1. Did the user click on another monitor or Alt-Tab?
-            // If the game window isn't the active foreground window, we lost focus!
-            if (gameWindow == IntPtr.Zero || gameWindow != foregroundWindow)
+            // Cross-platform: stop panning when the game loses focus (Alt-Tab, window switch).
+            if (!Application.isFocused)
             {
                 isOutOfBounds = true;
             }
-            else
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                // 2. Is the mouse hovering on the second monitor without clicking?
+                // Windows only: also catch the case where the cursor hovers onto a second monitor
+                // without clicking, since Unity clamps its reported position to the window edge.
                 POINT p;
                 if (GetCursorPos(out p))
                 {
-                    ScreenToClient(gameWindow, ref p);
+                    ScreenToClient(GetActiveWindow(), ref p);
 
                     if (p.X < 0 || p.Y < 0 || p.X > Screen.width || p.Y > Screen.height)
                     {
@@ -147,5 +140,17 @@ public class DotaCameraMoveFramePatch
             }
         }
         return true;
+    }
+}
+
+// CameraManager.SetZoomLevels(zoomMin, zoomMax) is called once per map (Base/World/War) to apply
+// that map's configured zoom bounds. Inflating zoomMax here widens the vanilla clamp for every map.
+[HarmonyPatch(typeof(CameraManager), "SetZoomLevels")]
+public class CameraZoomOutPatch
+{
+    static void Prefix(ref float zoomMax)
+    {
+        zoomMax *= Plugin.ZoomOutMultiplier.Value;
+        Plugin.Log.LogInfo("[WideAngleLens] Custom zoom level set.");
     }
 }

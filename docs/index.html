@@ -634,7 +634,7 @@
     <div class="banner-eyebrow">Quality-of-Life Mod for Suzerain</div>
     <img src="logo.png" alt="Suzerain Unbound" class="banner-logo">
     <div class="banner-subtitle">The Suzerain experience, refined.</div>
-    <div class="banner-version">Release v1.6.0</div>
+    <div class="banner-version">Release v1.7.0</div>
   </div>
 </header>
 
@@ -695,6 +695,12 @@
       </div>
 
       <div class="patch-card">
+        <div class="patch-name">Read All Reports</div>
+        <p class="patch-desc">Press a key (default: <code>F1</code>/<code>F2</code>) to instantly mark all pending map reports or news articles as read.</p>
+        <span class="patch-status on">Quality of Life</span>
+      </div>
+
+      <div class="patch-card">
         <div class="patch-name">Dota Camera Rebind</div>
         <p class="patch-desc">Allow map dragging with the Middle-Mouse Button. (Does not affect Right-Mouse.)</p>
         <span class="patch-status on">Controls</span>
@@ -707,15 +713,15 @@
       </div>
       
       <div class="patch-card">
-        <div class="patch-name">Discord RPC</div>
-        <p class="patch-desc">Enables Discord Rich Presence for Suzerain, which displays info similar to Steam Rich Presence.</p>
-        <span class="patch-status on">New Features</span>
+        <div class="patch-name">Wide Angle Lens</div>
+        <p class="patch-desc">Allow the camera to zoom out further than the vanilla limit.</p>
+        <span class="patch-status on">Controls</span>
       </div>
       
       <div class="patch-card">
-        <div class="patch-name">Read All Reports</div>
-        <p class="patch-desc">Press a key (default: <code>F1</code>/<code>F2</code>) to instantly mark all pending map reports or news articles as read.</p>
-        <span class="patch-status on">Quality of Life</span>
+        <div class="patch-name">Discord RPC</div>
+        <p class="patch-desc">Enables Discord Rich Presence for Suzerain, which displays info similar to Steam Rich Presence.</p>
+        <span class="patch-status on">New Features</span>
       </div>
 
       <div class="patch-card">
@@ -921,7 +927,7 @@ Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
     <ul class="issues-list">
       <li>
         <strong>Fix Camera Edge Pan</strong>
-        The fix that prevents endless panning when the mouse is moved off the screen (default: <code>stopAtEdge</code>) only works on Windows. Other platforms must use the <code>vanilla</code> or <code>disabled</code> modes.
+        The <code>stopAtEdge</code> mode has only been confirmed to work on Windows. Mac users may still benefit from it for focus-loss cases (Alt-Tab, window switching), but behavior with multi-monitor hover has not been tested.
       </li>
       <li>
         <strong>General Crashes</strong>
@@ -948,7 +954,7 @@ Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
     <div class="compat-block">
       <div class="compat-row">
         <span class="compat-key">Suzerain Unbound version</span>
-        <span class="compat-val">v1.6.0</span>
+        <span class="compat-val">v1.7.0</span>
       </div>
       <div class="compat-row">
         <span class="compat-key">BepInEx required</span>
