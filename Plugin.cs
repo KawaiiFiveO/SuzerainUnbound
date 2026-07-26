@@ -51,7 +51,7 @@ public class Plugin : BasePlugin
         Log.LogMessage("  A Morgna wes core! Vectern sis da!");
         Log.LogMessage("==========================================================================");
         Log.LogMessage("  [REQUIREMENT] Requires BepInEx 6.0 (IL2CPP) Bleeding Edge!");
-        Log.LogMessage("  [INFO] Developed on BepInEx build: 6.0.0-be.783");
+        Log.LogMessage("  [INFO] Developed on BepInEx build: 6.0.0-be.785");
         Log.LogMessage("  [INFO] Tested on Suzerain version: 3.1.0 (Windows) Build: 175");
         Log.LogMessage("==========================================================================");
 
@@ -277,7 +277,7 @@ public class Plugin : BasePlugin
         {
             try
             {
-                harmony.PatchAll(typeof(ForceDialogueAchievementPatch));
+                harmony.PatchAll(typeof(ForceAchievementPatch));
                 Log.LogInfo("[CONFIG] Force Achievements patch applied.");
             }
             catch

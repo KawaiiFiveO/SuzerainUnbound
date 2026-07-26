@@ -1,44 +1,34 @@
 ﻿using HarmonyLib;
 using Steamworks.Data;
-using PixelCrushers.DialogueSystem.SequencerCommands;
 using System;
 
 namespace SuzerainUnbound;
 
-[HarmonyPatch(typeof(SequencerCommandUnlockSteamAchievement), nameof(SequencerCommandUnlockSteamAchievement.Start))]
-public class ForceDialogueAchievementPatch
+// StoreManager.UnlockAchievement is the single choke point for achievement unlocks:
+// the [LuaFunction] attribute means the dialogue database calls it directly as Lua, and
+// SequencerCommandUnlockSteamAchievement.Start() also routes into it.
+// Vanilla gates the whole body behind isTorporModeOn, returning silently when it is off,
+// so we trigger the Steam achievement ourselves before the original runs.
+[HarmonyPatch(typeof(StoreManager), nameof(StoreManager.UnlockAchievement))]
+public class ForceAchievementPatch
 {
-    static void Prefix(SequencerCommandUnlockSteamAchievement __instance)
+    static void Prefix(string achievementID)
     {
-        // SequencerCommand.parameters is protected, so we read it via Traverse.
-        // Accessing the property directly is more robust than invoking GetParameter by name.
-        string achievementID = string.Empty;
+        if (string.IsNullOrEmpty(achievementID))
+        {
+            Plugin.Log.LogWarning("[ForceAchievements] UnlockAchievement called with an empty ID.");
+            return;
+        }
+
+        Plugin.Log.LogInfo($"[ForceAchievements] Bypassing Torpor Mode! Unlocking achievement: {achievementID}");
+
         try
         {
-            string[] parameters = Traverse.Create(__instance).Property("parameters").GetValue<string[]>();
-            achievementID = (parameters != null && parameters.Length > 0) ? parameters[0] : string.Empty;
+            new Achievement(achievementID).Trigger();
         }
         catch (Exception ex)
         {
-            Plugin.Log.LogWarning($"[ForceAchievements] Failed to get achievement ID: {ex.Message}");
-        }
-
-        if (!string.IsNullOrEmpty(achievementID))
-        {
-            Plugin.Log.LogInfo($"[ForceAchievements] Bypassing Torpor Mode! Unlocking achievement: {achievementID}");
-
-            try
-            {
-                new Achievement(achievementID).Trigger();
-            }
-            catch (Exception ex)
-            {
-                Plugin.Log.LogWarning($"[ForceAchievements] Failed to unlock achievement '{achievementID}': {ex.Message}");
-            }
-        }
-        else
-        {
-            Plugin.Log.LogWarning("[ForceAchievements] Achievement ID was not found!");
+            Plugin.Log.LogWarning($"[ForceAchievements] Failed to unlock achievement '{achievementID}': {ex.Message}");
         }
     }
 }

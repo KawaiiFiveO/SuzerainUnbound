@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using UnityEngine.Events;
 
 namespace SuzerainUnbound
 {
@@ -24,6 +25,8 @@ namespace SuzerainUnbound
     // System/destructive confirmations (exit, quit, back-to-menu, load-checkpoint) are only
     // skipped when the user opts in via the skipAll config toggle, since they guard against
     // losing unsaved progress on a misclick.
+    //
+    // The decree sign popup does NOT use this mechanism -- see DecreeSignSkip below.
 
     public enum ConfirmSkipMode
     {
@@ -45,7 +48,6 @@ namespace SuzerainUnbound
             new Target(typeof(TemplateArchetypeSlot),       "OnSelectArchetypeButtonClick", "_OnSelectArchetypeButtonClick_b__17_0", false, "Archetype"),
             new Target(typeof(CharacterCustomizationPanel), "OnFinish",                     "_OnFinish_b__33_0",                     false, "Customization"),
             new Target(typeof(LoadArchetypePanel),          "OnConfirmSaveFileSelection",   "_OnConfirmSaveFileSelection_b__21_0",   false, "LoadArchetype"),
-            new Target(typeof(DecreeDetailsPage),           "OnSignClick",                  "_OnSignClick_b__0",                     false, "DecreeSign"),
             new Target(typeof(OneTimeDecreesPanel),         "OnFinishButtonClick",          "_OnFinishButtonClick_b__37_0",          false, "OneTimeDecrees"),
 
             // --- system / destructive: only skipped when SkipSystem is enabled ---
@@ -75,6 +77,8 @@ namespace SuzerainUnbound
                 harmony.Patch(target, prefix: new HarmonyMethod(prefix));
                 Plugin.Log.LogInfo($"[YesImSure] Patched {t.Type.Name}.{t.Method} ({t.Label})");
             }
+
+            DecreeSignSkip.Apply(harmony);
         }
 
         // Shared prefix. Uses __originalMethod to find which popup this is.
@@ -222,6 +226,133 @@ namespace SuzerainUnbound
                 ConfirmLambda = confirmLambda;
                 System = system;
                 Label = label;
+            }
+        }
+    }
+
+    // Auto-confirms the decree "are you sure you want to sign this?" popup, but leaves the
+    // counsel variant ("The Grand Vizier wishes to speak to you before you sign...") alone.
+    //
+    // This one popup cannot use the ConfirmSkipPatches mechanism above. Its confirm lambda lives
+    // in a *capturing* display class:
+    //
+    //   DecreeDetailsPage.<>c__DisplayClass14_0
+    //     +0x10  <>4__this
+    //     +0x18  hasDecreeCounselConversation   <-- the bool <OnSignClick>b__0 branches on
+    //
+    // b__0 disables the sign button, then either fires onSignConfirmed (sign now) or starts the
+    // counsel conversation, depending on that bool. Suppressing OnSignClick and rebuilding the
+    // display class by hand leaves the bool zeroed, so every decree took the sign-now branch and
+    // the counsel conversation was silently discarded along with everything it sets.
+    //
+    // So we let OnSignClick run instead. It has no side effects of its own -- it builds a
+    // ConfirmationPanelData and calls ConfirmationPanel.Setup synchronously -- which leaves the
+    // game holding a correctly populated display class. We intercept Setup, read the bool off
+    // the real confirm delegate, and either invoke that delegate (no conversation: sign now) or
+    // fall through and let the prompt render (conversation: the player still opts in).
+    internal static class DecreeSignSkip
+    {
+        private const int DelegateTargetOffset = 0x20; // System.Delegate.m_target
+        private const int HasCounselOffset     = 0x18; // <>c__DisplayClass14_0.hasDecreeCounselConversation
+
+        // Set for the duration of OnSignClick so the Setup prefix knows the popup being built is
+        // ours. Setup is called directly from OnSignClick, so the window is a single call deep.
+        [ThreadStatic] private static bool _inSignClick;
+
+        public static void Apply(Harmony harmony)
+        {
+            MethodInfo signClick = AccessTools.Method(typeof(DecreeDetailsPage), "OnSignClick");
+            MethodInfo setup = AccessTools.Method(typeof(ConfirmationPanel), "Setup",
+                new[] { typeof(ConfirmationPanel.ConfirmationPanelData) });
+
+            if (signClick == null || setup == null)
+            {
+                Plugin.Log.LogError("[YesImSure] Target not found: DecreeDetailsPage.OnSignClick or ConfirmationPanel.Setup (DecreeSign) -- skipped");
+                return;
+            }
+
+            harmony.Patch(signClick,
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(DecreeSignSkip), nameof(SignClickPrefix))),
+                finalizer: new HarmonyMethod(AccessTools.Method(typeof(DecreeSignSkip), nameof(SignClickFinalizer))));
+
+            harmony.Patch(setup,
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(DecreeSignSkip), nameof(SetupPrefix))));
+
+            Plugin.Log.LogInfo("[YesImSure] Patched DecreeDetailsPage.OnSignClick (DecreeSign)");
+        }
+
+        private static void SignClickPrefix()
+        {
+            _inSignClick = true;
+        }
+
+        // Finalizer rather than a postfix so the flag is cleared even if OnSignClick throws.
+        private static void SignClickFinalizer()
+        {
+            _inSignClick = false;
+        }
+
+        private static bool SetupPrefix(ConfirmationPanel.ConfirmationPanelData confirmationPanelData)
+        {
+            if (!_inSignClick)
+            {
+                return true; // some other popup -> leave it alone
+            }
+
+            UnityAction confirm = confirmationPanelData?.buttonAction_2;
+            if (confirm == null)
+            {
+                Plugin.Log.LogWarning("[YesImSure] 'DecreeSign' popup had no confirm action -- showing popup instead");
+                return true;
+            }
+
+            bool? hasCounsel = ReadHasCounselConversation(confirm);
+            if (hasCounsel == null)
+            {
+                Plugin.Log.LogWarning("[YesImSure] 'DecreeSign' counsel state could not be read -- showing popup instead");
+                return true;
+            }
+
+            if (hasCounsel.Value)
+            {
+                // Confirming here would drop the player straight into the counsel conversation
+                // rather than signing, so this prompt is a real choice. Let it render.
+                return true;
+            }
+
+            confirm.Invoke();
+            Plugin.Log.LogInfo("[YesImSure] Auto-confirmed and skipped popup: DecreeSign");
+
+            StrangeRanks.IncrementStrangeStat(Plugin.SkippedPopupsCount, "Popup Skipper");
+
+            return false; // suppress -> no dialog
+        }
+
+        // Walks confirm -> its display class -> the captured bool. Il2CppInterop cannot reach
+        // compiler-generated types by name, so both hops are raw reads; the offsets come from the
+        // il2cpp dump and are confirmed by the decompiled OnSignClick.
+        private static bool? ReadHasCounselConversation(UnityAction confirm)
+        {
+            try
+            {
+                IntPtr confirmPtr = IL2CPP.Il2CppObjectBaseToPtr(confirm);
+                if (confirmPtr == IntPtr.Zero)
+                {
+                    return null;
+                }
+
+                IntPtr displayClass = Marshal.ReadIntPtr(IntPtr.Add(confirmPtr, DelegateTargetOffset));
+                if (displayClass == IntPtr.Zero)
+                {
+                    return null; // multicast delegate or unbound -- not something we can read
+                }
+
+                return Marshal.ReadByte(IntPtr.Add(displayClass, HasCounselOffset)) != 0;
+            }
+            catch (Exception e)
+            {
+                Plugin.Log.LogError($"[YesImSure] Reading 'DecreeSign' counsel state threw: {e}");
+                return null;
             }
         }
     }

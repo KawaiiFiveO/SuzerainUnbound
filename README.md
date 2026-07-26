@@ -64,7 +64,7 @@ If there is a game update, Suzerain Unbound will stop working, and the `BepInEx/
 
 If you already have BepInEx 6.0 installed and want to use Suzerain Unbound alongside other mods, you can download the "Plugin Only" release and install it by dropping `SuzerainUnbound.dll` directly into your existing `Suzerain/BepInEx/plugins` folder.
 
-**NOTE**: This plugin requires **BepInEx 6.0 (IL2CPP) Bleeding Edge** (tested on build #783). It will **NOT** work on BepInEx 5.x. If you do not know what this means, please download the **"With Modloader"** bundle, which includes everything pre-configured!
+**NOTE**: This plugin requires **BepInEx 6.0 (IL2CPP) Bleeding Edge** (tested on build #785). It will **NOT** work on BepInEx 5.x. If you do not know what this means, please download the **"With Modloader"** bundle, which includes everything pre-configured!
 
 ### Uninstall
 
@@ -90,7 +90,7 @@ If you want to contribute to Suzerain Unbound or build it from source, you will 
 
 ### Prerequisites
 1. You must have **Suzerain** installed.
-2. You must have **BepInEx 6.0 (IL2CPP)** installed in your game directory. (tested on build #783)
+2. You must have **BepInEx 6.0 (IL2CPP)** installed in your game directory. (tested on build #785)
 3. You must have launched the game at least once with BepInEx active to generate the `BepInEx/interop` assemblies.
 
 * Note: Standard BepInEx 5.x **will not work** as it does not support IL2CPP games.
@@ -121,7 +121,7 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.7.0
+Latest release of Suzerain Unbound: v1.7.1
 
 Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
 
