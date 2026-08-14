@@ -32,11 +32,15 @@ Each patch can be enabled or disabled in the configuration file.
 
 **Text Hook:** Live text hook for external translation and text-to-speech tools. Compatible with LunaTranslator and any clipboard-monitoring tool.
 
+**Custom Asset Loader**: Load asset mods from a folder instead of overwriting files in your Suzerain installation. Drop an asset mod into `BepInEx/plugins/SuzerainUnbound/AssetMods` and its textures are used in place of the originals, leaving the game's own files untouched.
+
 **Torpor Mode Unlock**: Suzerain forces Torpor Mode ON when playing on a fresh profile. This allows it to be set to OFF so that you can save your game.
 
 **Force Achievements**: Forces Steam achievements to unlock even if Torpor Mode is off.
 
 Accessibility patches are disabled by default. Enable them in the configuration file if needed.
+
+The Custom Asset Loader is disabled by default. See the readme inside the `AssetMods` folder for how to install asset mods.
 
 Torpor Mode Unlock and Force Achievements are disabled by default because they are cheats that can alter your user profile or save files.
 
@@ -56,13 +60,25 @@ Launch the game and wait 1-2 minutes on the first boot for BepInEx to initialize
 
 Enjoy the improvements!
 
+### Upgrading from v1.7.1 or earlier
+
+As of v1.8.0, Suzerain Unbound installs into its own folder at `BepInEx/plugins/SuzerainUnbound` instead of placing loose DLLs in `BepInEx/plugins`. If you extract a new release over an older install, delete these leftovers from `BepInEx/plugins` (**not** from the new `SuzerainUnbound` folder), or you will be running two copies of the plugin at once:
+
+```
+SuzerainUnbound.dll
+DiscordRPC.dll
+Newtonsoft.Json.dll
+```
+
+Suzerain Unbound will warn you in the BepInEx console if it detects a leftover copy. Your configuration file and settings are unaffected and carry over.
+
 ### Game Updates
 
 If there is a game update, Suzerain Unbound will stop working, and the `BepInEx/interop` folder will need to be deleted to launch the game. It is recommended to uninstall BepInEx entirely by following the instructions below, then install a new "With Modloader" release (if present).
 
 ### Advanced Users
 
-If you already have BepInEx 6.0 installed and want to use Suzerain Unbound alongside other mods, you can download the "Plugin Only" release and install it by dropping `SuzerainUnbound.dll` directly into your existing `Suzerain/BepInEx/plugins` folder.
+If you already have BepInEx 6.0 installed and want to use Suzerain Unbound alongside other mods, you can download the "Plugin Only" release and install it by dropping the whole `SuzerainUnbound` folder directly into your existing `Suzerain/BepInEx/plugins` folder.
 
 **NOTE**: This plugin requires **BepInEx 6.0 (IL2CPP) Bleeding Edge** (tested on build #785). It will **NOT** work on BepInEx 5.x. If you do not know what this means, please download the **"With Modloader"** bundle, which includes everything pre-configured!
 
@@ -70,7 +86,7 @@ If you already have BepInEx 6.0 installed and want to use Suzerain Unbound along
 
 If you wish to temporarily disable BepInEx, you can rename the `BepInEx` folder in the `Suzerain` directory to something else (such as `zBepinEx`) to prevent it from launching when you start the game.
 
-To disable only Suzerain Unbound specifically, remove `SuzerainUnbound.dll` from the `Suzerain/BepInEx/plugins` folder.
+To disable only Suzerain Unbound specifically, remove the `SuzerainUnbound` folder from `Suzerain/BepInEx/plugins`.
 
 To permanently revert your game back to vanilla, delete the following items from the `Suzerain` directory:
 
@@ -121,7 +137,7 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 
 ### Compatibility
 
-Latest release of Suzerain Unbound: v1.7.1
+Latest release of Suzerain Unbound: v1.8.0
 
 Tested with Suzerain version 3.1.0 (Windows) Build: 175, and WILL break if there is a major game update. Submit an [issue report](https://github.com/KawaiiFiveO/SuzerainUnbound/issues) if a patch is broken AND you are using the correct version of Suzerain Unbound. Include the log files in your report.
 

@@ -5,6 +5,7 @@ using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
 using System;
+using System.IO;
 using UnityEngine;
 
 namespace SuzerainUnbound;
@@ -38,6 +39,8 @@ public class Plugin : BasePlugin
     public static ConfigEntry<TextHookMode> EnableTextHook;
     public static ConfigEntry<string> LunaTranslatorUrl;
     public static ConfigEntry<bool> TextHookIncludePlayerLines;
+    public static ConfigEntry<bool> EnableAssetLoader;
+    public static ConfigEntry<string> AssetModsPath;
 
     public override void Load()
     {
@@ -54,6 +57,8 @@ public class Plugin : BasePlugin
         Log.LogMessage("  [INFO] Developed on BepInEx build: 6.0.0-be.785");
         Log.LogMessage("  [INFO] Tested on Suzerain version: 3.1.0 (Windows) Build: 175");
         Log.LogMessage("==========================================================================");
+
+        WarnOnStaleInstall();
 
         // 2. Bind the configs. (Category, Name, Default Value, Description)
         // This generates a text file in BepInEx/config/com.onehalf.suzerainunbound.cfg
@@ -79,6 +84,10 @@ public class Plugin : BasePlugin
         EnableTextHook = Config.Bind("Accessibility", "TextHook", TextHookMode.disabled, "Live text hook for external translation/text-to-speech tools.\ndisabled: Off.\nlunaTranslator: POST each dialogue line to LunaTranslator's /api/textinput.\nclipboard: Copy each line to the system clipboard.\nboth: Do both simultaneously.");
         LunaTranslatorUrl = Config.Bind("Translation", "LunaTranslatorUrl", "http://localhost:2333", "(TextHook) Base URL of the LunaTranslator network service. Check LunaTranslator Settings -> Network Service for the port.");
         TextHookIncludePlayerLines = Config.Bind("Translation", "IncludePlayerLines", true, "(TextHook) Whether to send player's chosen dialogue lines. Disable for NPC-only output.");
+
+        // Custom Asset Loader is off by default
+        EnableAssetLoader = Config.Bind("Asset Mods", "CustomAssetLoader", false, "Load asset mods from the AssetMods folder instead of overwriting files in the game directory.");
+        AssetModsPath = Config.Bind("Asset Mods", "AssetModsPath", "", "(CustomAssetLoader) Folder to load asset mods from. Leave blank to use the AssetMods folder next to SuzerainUnbound.dll. Accepts an absolute path, or one relative to the game folder.");
 
         // Cheats are off by default
         EnableTorporUnlock = Config.Bind("Cheats", "TorporModeUnlock", false, "Allows disabling Torpor Mode on fresh saves.");
@@ -213,7 +222,7 @@ public class Plugin : BasePlugin
             catch (Exception ex)
             {
                 Log.LogWarning($"[CONFIG] Discord Rich Presence patches failed to apply: {ex.Message}");
-                Log.LogWarning("[CONFIG] If this mentions a missing 'DiscordRPC' assembly, make sure DiscordRPC.dll (and its dependencies) are present in BepInEx/plugins.");
+                Log.LogWarning("[CONFIG] If this mentions a missing 'DiscordRPC' assembly, make sure DiscordRPC.dll (and its dependencies) are present in BepInEx/plugins/SuzerainUnbound.");
             }
         }
 
@@ -286,12 +295,78 @@ public class Plugin : BasePlugin
             }
         }
 
+        if (EnableAssetLoader.Value)
+        {
+            try
+            {
+                // Only patch if there is actually something to redirect, so an enabled but
+                // empty AssetMods folder costs nothing at runtime.
+                if (AssetModIndex.Build())
+                {
+                    harmony.PatchAll(typeof(CustomAssetLoaderPatch));
+                    Log.LogInfo($"[CONFIG] Custom Asset Loader patch applied. {AssetModIndex.Count} replacement bundle(s) from {AssetModIndex.ModCount} asset mod(s) in '{AssetModIndex.RootPath}':");
+                    AssetModIndex.LogModBreakdown();
+                }
+                else
+                {
+                    Log.LogInfo("[CONFIG] Custom Asset Loader is enabled but found no asset mods, so the patch was not applied.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.LogWarning($"[CONFIG] Custom Asset Loader patch failed to apply: {ex.Message}");
+            }
+        }
+
         Log.LogInfo("All selected patches applied!");
 
         // Display user stats
         if (ShowStrangeRanks.Value)
         {
             StrangeRanks.Display();
+        }
+    }
+
+
+    // v1.8.0 moved the plugin's DLLs into their own subfolder. Anyone who unzipped the new
+    // release over an older install without deleting the old loose DLLs ends up with two
+    // copies of the plugin in the tree.
+    private static void WarnOnStaleInstall()
+    {
+        try
+        {
+            string pluginRoot = Paths.PluginPath;
+            string ourDir = Path.GetDirectoryName(typeof(Plugin).Assembly.Location);
+            if (string.IsNullOrEmpty(pluginRoot) || string.IsNullOrEmpty(ourDir))
+            {
+                return;
+            }
+
+            // If we are running from the plugins root ourselves, there is nothing to compare.
+            string normalizedRoot = Path.GetFullPath(pluginRoot).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string normalizedOurs = Path.GetFullPath(ourDir).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            if (string.Equals(normalizedRoot, normalizedOurs, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            string stale = Path.Combine(normalizedRoot, "SuzerainUnbound.dll");
+            if (!File.Exists(stale))
+            {
+                return;
+            }
+
+            Log.LogWarning("==========================================================================");
+            Log.LogWarning("  [OLD INSTALL] Found a leftover SuzerainUnbound.dll from an older version:");
+            Log.LogWarning($"  {stale}");
+            Log.LogWarning("  As of v1.8.0 the plugin lives in BepInEx/plugins/SuzerainUnbound/ instead.");
+            Log.LogWarning("  Delete that leftover DLL (and any DiscordRPC.dll / Newtonsoft.Json.dll");
+            Log.LogWarning("  beside it) to avoid running two copies of the plugin at once.");
+            Log.LogWarning("==========================================================================");
+        }
+        catch (Exception ex)
+        {
+            Log.LogDebug($"[OLD INSTALL] Stale install check failed: {ex.Message}");
         }
     }
 }

@@ -2,7 +2,7 @@
 # Suzerain Unbound - Automated Release Build
 # ==========================================
 
-$version = "1.7.1"
+$version = "1.8.0"
 $modName = "SuzerainUnbound"
 
 # Paths
@@ -13,6 +13,13 @@ $stagingDir = "$outputDir\Staging"
 
 # Configuration File Name
 $configFile = "com.onehalf.suzerainunbound.cfg"
+
+# As of v1.8.0 the DLLs ship inside BepInEx\plugins\$modName instead of loose in
+# plugins, which keeps our dependencies from colliding with other plugins' copies
+# and gives the Custom Asset Loader an AssetMods folder to live in.
+# Compress-Archive drops empty directories, so the readme is what makes the empty
+# AssetMods folder survive zipping.
+$assetModsReadme = "README_Asset_Mods.txt"
 
 Write-Host "Starting build process for v$version..." -ForegroundColor Cyan
 
@@ -35,10 +42,12 @@ New-Item -ItemType Directory -Path $stagingDir | Out-Null
 # ==========================================
 Write-Host "Packaging Plugin-Only Build..."
 $pluginDir = "$stagingDir\PluginOnly"
-New-Item -ItemType Directory -Path $pluginDir | Out-Null
+$pluginModDir = "$pluginDir\$modName"
+New-Item -ItemType Directory -Path "$pluginModDir\AssetMods" -Force | Out-Null
 
-# Copy ALL DLLs and Config
-Copy-Item $dllFiles -Destination $pluginDir
+# Copy ALL DLLs into the mod's own subfolder, and the Config alongside it
+Copy-Item $dllFiles -Destination $pluginModDir
+Copy-Item "$assetsDir\$assetModsReadme" -Destination "$pluginModDir\AssetMods"
 Copy-Item "$assetsDir\$configFile" -Destination $pluginDir
 
 # Read the README, replace the {{VERSION}} tag, and write it to the staging folder
@@ -79,7 +88,10 @@ if (!(Test-Path $pluginsPath)) { New-Item -ItemType Directory -Path $pluginsPath
 if (!(Test-Path $configPath)) { New-Item -ItemType Directory -Path $configPath | Out-Null }
 
 # Copy Mod Files
-Copy-Item $dllFiles -Destination $pluginsPath
+$bundleModDir = "$pluginsPath\$modName"
+New-Item -ItemType Directory -Path "$bundleModDir\AssetMods" -Force | Out-Null
+Copy-Item $dllFiles -Destination $bundleModDir
+Copy-Item "$assetsDir\$assetModsReadme" -Destination "$bundleModDir\AssetMods"
 Copy-Item "$assetsDir\$configFile" -Destination $configPath
 
 # Read the README, replace the {{VERSION}} tag, and write it

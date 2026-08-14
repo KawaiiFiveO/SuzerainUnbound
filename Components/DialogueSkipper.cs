@@ -1,4 +1,4 @@
-﻿using PixelCrushers.DialogueSystem;
+using PixelCrushers.DialogueSystem;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,7 +10,6 @@ public class DialogueSkipper : MonoBehaviour
     public DialogueSkipper(IntPtr ptr) : base(ptr) { }
 
     private float _nextAdvanceTime = 0f;
-    private OneTimeDecreesPanel _decreePanel;
 
     void Update()
     {
@@ -20,19 +19,26 @@ public class DialogueSkipper : MonoBehaviour
             Key configuredKey = InputHelper.ToInputKey(Plugin.SkipKey.Value);
 
             // Use the indexer to read the live physical state of the configured key
-            if (Keyboard.current != null && Keyboard.current[configuredKey].isPressed && DialogueManager.standardDialogueUI != null && DialogueManager.isConversationActive)
+            if (Keyboard.current != null && Keyboard.current[configuredKey].isPressed)
             {
                 if (Time.time >= _nextAdvanceTime)
                 {
-                    // ConversationPanel.PauseConversation() is a game-level pause that doesn't
-                    // block OnContinueConversation() at the PixelCrushers level. Guard manually:
-                    // don't advance dialogue while a game panel is overriding the conversation.
-                    if (_decreePanel == null)
-                    {
-                        _decreePanel = FindObjectOfType<OneTimeDecreesPanel>();
-                    }
-
-                    if (_decreePanel != null && _decreePanel.IsShowing())
+                    // Any panel that takes over a conversation (decrees, decisions, budget
+                    // meetings, war production, bills) routes through
+                    // ConversationPanel.PauseConversation() -> ConversationHandler.Pause() ->
+                    // DialogueSystemController.Pause(), which sets DialogueTime.isPaused.
+                    // PixelCrushers does not gate OnContinueConversation() on that flag, so
+                    // advancing here walks the conversation past its decision branch before the
+                    // panel has written the result -- characters then react to the choice you
+                    // didn't make.
+                    //
+                    // The flag stays set until the panel's finish coroutine has run every
+                    // DialogueLua.SetVariable / ArticyLuaHelper.Run and called
+                    // UnpauseConversation(), so it also covers the window after the panel stops
+                    // showing but before its decisions have been applied. A panel IsShowing()
+                    // check does not: PagedDecisionPanel clears isShowing on the first line of
+                    // its finish coroutine, one hide animation and a frame before any Lua runs.
+                    if (DialogueTime.isPaused)
                     {
                         return;
                     }
