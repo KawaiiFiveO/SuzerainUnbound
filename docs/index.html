@@ -818,6 +818,12 @@
       </li>
     </ol>
 
+    <h3>Installing Asset Mods</h3>
+    <p><strong>(Optional)</strong> If you want to use any third-party asset mods, place their files inside the AssetMods folder:
+    <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound/AssetMods/            (folder)</pre>
+    Then enable the <strong>Custom Asset Loader</strong> patch.</p>
+    <p><em>(Suzerain Unbound does not officially endorse any third-party asset mods and cannot guarantee their functionality.)</em></p>
+
     <h3>After a Game Update</h3>
     <p>If Suzerain receives an update, Suzerain Unbound will stop working. The safest approach is to fully uninstall BepInEx (see below), then install a new "With Modloader" release once one is available.</p>
     <p>Make a copy of your configuration file if you'd like to keep your settings. (Note: After reinstalling, it is better to modify the new configuration file instead of overwriting it with the backup, as updates may add new options.)</p>
@@ -830,10 +836,8 @@
       <h2>Uninstalling</h2>
     </div>
     <p>To <strong>temporarily disable</strong> BepInEx without uninstalling, rename the <code>BepInEx</code> folder to something else (e.g. <code>zBepInEx</code>). The mod loader will not run until you rename it back.</p>
-    <p>To disable <strong>only Suzerain Unbound</strong>, remove the DLLs from the plugins folder:</p>
-    <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound.dll
-Suzerain/BepInEx/plugins/DiscordRPC.dll
-Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
+    <p>To disable <strong>only Suzerain Unbound</strong>, remove its folder (containing the DLLs) from the plugins folder:</p>
+    <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound/            (folder)</pre>
     <p>To <strong>fully revert to vanilla</strong>, delete the following items from your Suzerain directory, then re-verify files on Steam if needed:</p>
     <pre class="code-block">BepInEx/            (folder)
 dotnet/             (folder)
@@ -858,10 +862,8 @@ winhttp.dll</pre>
     </div>
     <div class="dossier-body" aria-hidden="true">
       <div class="dossier-body-inner">
-        <p>If you already have <strong>BepInEx 6.0</strong> installed and want to run Suzerain Unbound alongside other mods, or you want to install BepInEx manually, download the "Plugin Only" release instead and drop the DLLs directly into your existing plugins folder:</p>
-        <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound.dll
-Suzerain/BepInEx/plugins/DiscordRPC.dll
-Suzerain/BepInEx/plugins/Newtonsoft.Json.dll</pre>
+        <p>If you already have <strong>BepInEx 6.0</strong> installed and want to run Suzerain Unbound alongside other mods, or you want to install BepInEx manually, download the "Plugin Only" release instead and drop the folder (containing the DLLs) directly into your existing plugins folder:</p>
+        <pre class="code-block">Suzerain/BepInEx/plugins/SuzerainUnbound/            (folder)</pre>
         <p>You can use this method to update Suzerain Unbound without updating the modloader. Sometimes, a plugin update will be released on the same BepInEx version, in which case you do not need the "With Modloader" release.</p>
         <p>If the game itself was updated, delete the <code>BepInEx/interop</code> folder before launching the game again.</p>
         <div class="callout warn">

@@ -2,7 +2,7 @@
 
 ![preview](/docs/preview.png)
 
-Quality of Life patches for vanilla Suzerain. Remove limitations placed by the developers and add important features.
+Suzerain Unbound is a collection of quality-of-life patches designed for a refined Suzerain experience.
 
 ### [View Documentation Webpage](https://onehalf.dev/SuzerainUnbound/)
 
@@ -59,6 +59,10 @@ Launch the game and wait 1-2 minutes on the first boot for BepInEx to initialize
 <img width="976" height="506" alt="bepinex" src="https://github.com/user-attachments/assets/f2677342-b1d7-4801-b529-6fee7c04a810" />
 
 Enjoy the improvements!
+
+### Installing Asset Mods
+
+If you want to use any third-party asset mods, place those files inside the AssetMods folder (located at `Suzerain/BepInEx/plugins/SuzerainUnbound/AssetMods`) and enable the **Custom Asset Loader** patch. *(Suzerain Unbound does not officially endorse any third-party asset mods and cannot guarantee their functionality.)*
 
 ### Upgrading from v1.7.1 or earlier
 
@@ -130,8 +134,6 @@ You can submit a [feature request](https://github.com/KawaiiFiveO/SuzerainUnboun
 ### Known Issues
 
 **Fix Camera Edge Pan:** The `stopAtEdge` mode has only been confirmed to work on Windows. Mac users may still benefit from it for focus-loss cases (Alt-Tab, window switching), but behavior with multi-monitor hover has not been tested.
-
-**General Crashes:** Vanilla Suzerain/BepInEx (Bleeding Edge) is already known to be unstable, so adding mods to it probably doesn't help.
 
 **Downloading Unity Base Libraries:** On the first launch of a new installation, BepInEx must download the Unity base libraries before it can launch. This download may fail if you are using a VPN, so disable your VPN if BepInEx is unable to download the libraries. 
 
